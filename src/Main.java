@@ -39,7 +39,7 @@ public class Main {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenu, opcoesMenu[0]);
         switch (opcao) {
             case 0: //Cadastros
-                //chamaMenuCadastros();
+                chamaMenuCadastros();
                 break;
             case 1: //Processos
                 //chamaMenuProcessos();
@@ -54,13 +54,13 @@ public class Main {
     }
 
     private static void chamaMenuCadastros() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenuCadastro = {"Pessoa", "Seguradora", "Seguro", "Voltar"};
+        String[] opcoesMenuCadastro = {"Startups", "Voltar"};
         int menuCadastro = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Cadastros",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuCadastro, opcoesMenuCadastro[0]);
 
         switch (menuCadastro) {
-            case 0: //Startus
+            case 0: //Startups
                 Startups startups = chamaCadastroStartup();
 //                if (startups != null) getStartupDAO().salvar(startups);
                 chamaMenuCadastros();
@@ -93,7 +93,7 @@ public class Main {
         Startups startups = null;
         switch (opcaoCrud) {
             case 0: //Inserção
-//                startups = cadastraStartup();
+                startups = cadastraStartup();
                 break;
             case 1: //Alteração
 //                startups = selecaoDePessoa();
@@ -110,9 +110,22 @@ public class Main {
 
     private static Startups cadastraStartup(){
         Startups startups = new Startups();
-        String nome = JOptionPane.showInputDialog(null, "Digite o nome da Startup: ");
+//        String nome = JOptionPane.showInputDialog(null, "Digite o nome da Startup: ");
+        JTextField nomeStartup = new JTextField();
+        JTextField descStartup = new JTextField();
+        JTextField dataIninio  = new JTextField();
+
+        Object[] message = {
+                "Nome da Startup: ", nomeStartup,
+                "Descricao da Startup: ", descStartup,
+                "Data de Criação da Startup: ", dataIninio
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
 
         return startups;
+
     }
 
 }
