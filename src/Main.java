@@ -1,5 +1,7 @@
 import model.*;
 import model.Usuario;
+import repository.CidadeDAO;
+import repository.StartupDAO;
 import repository.UsuarioDAO;
 
 import javax.swing.*;
@@ -57,7 +59,7 @@ public class Main {
     }
 
     private static void chamaMenuCadastros() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenuCadastro = {"Startups", "Voltar"};
+        String[] opcoesMenuCadastro = {"Startups", "Cidades", "Voltar"};
         int menuCadastro = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Cadastros",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuCadastro, opcoesMenuCadastro[0]);
@@ -65,12 +67,12 @@ public class Main {
         switch (menuCadastro) {
             case 0: //Startups
                 Startups startups = chamaCadastroStartup();
-//                if (startups != null) getStartupDAO().salvar(startups);
+                if (startups != null) getStartupDAO().salvar(startups);
                 chamaMenuCadastros();
                 break;
-            case 1: //Seguradoras
-                /*Seguradora seguradora = chamaCadastroSeguradora();
-                if (seguradora != null) getSeguradoraDAO().salvar(seguradora);*/
+            case 1: //Cidades
+                Cidade cidade = chamaCadastroCidades();
+                if (cidade != null) getCidadeDAO().salvar(cidade);
                 chamaMenuCadastros();
                 break;
             case 2: //Seguro
@@ -111,6 +113,26 @@ public class Main {
         return startups;
     }
 
+    private static Cidade chamaCadastroCidades() throws SQLException, ClassNotFoundException {
+        Integer opcaoCrud = chamaOpcaoCrud();
+        Cidade cidade = null;
+        switch (opcaoCrud) {
+            case 0: //Inserção
+                cidade = cadastraCidade();
+                break;
+            case 1: //Alteração
+                cidade = selecionaCidade();
+                cidade = editaCidade(cidade);
+                break;
+            default: //Exclusão
+//                startups = selecaoDePessoa();
+//                getPessoaDAO().remover(pessoa);
+//                pessoa = null;
+                break;
+        }
+        return cidade;
+    }
+
     private static Startups cadastraStartup(){
         JPopupMenu jPopupMenu;
         JButton button;
@@ -143,12 +165,94 @@ public class Main {
 
     }
 
+    private static Cidade cadastraCidade(){
+        JPopupMenu jPopupMenu;
+        JButton button;
+        Cidade cidades = new Cidade();
+
+        JTextField nomeCidade = new JTextField();
+
+        DefaultComboBoxModel<Estados> estadoEnum = new DefaultComboBoxModel<>(Estados.values());
+        JComboBox<Estados> comboBoxEstado = new JComboBox<>(estadoEnum);
+
+        Object[] message = {
+                "Nome da Cidade: ", nomeCidade,
+                "Estado: ", comboBoxEstado
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Cidades", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeCidade.getText();
+        Estados uf = (Estados) estadoEnum.getSelectedItem();
+
+        cidades.setNomeCidade(nome);
+        cidades.setEstados(Estados.valueOf(String.valueOf(uf)));
+
+        return cidades;
+
+    }
+
     private static List<String> getCidades() {
         List<String> cidades = new ArrayList<>();
         cidades.add("Criciúma");
         cidades.add("Içara");
         // Adicione mais cidades se necessário
         return cidades;
+    }
+
+    public static StartupDAO getStartupDAO(){
+        StartupDAO startupDAO = new StartupDAO();
+        return startupDAO;
+    }
+
+    public static CidadeDAO getCidadeDAO(){
+        CidadeDAO cidadeDAO = new CidadeDAO();
+        return cidadeDAO;
+    }
+
+    public static Cidade selecionaCidade(){
+        Object[] selectionValues = new Object[0];
+        try {
+            selectionValues = getCidadeDAO().findCidadeInArray();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String initialSelection = (String) selectionValues[0];
+            Object selection = JOptionPane.showInputDialog(null, "Selecione a Cidade", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            List<Cidade> cidades = getCidadeDAO().buscarPorNome((String) selection);
+
+        return cidades.get(0);
+    }
+
+    private static Cidade editaCidade(Cidade cidade){
+        JPopupMenu jPopupMenu;
+        JButton button;
+        Cidade cidades = new Cidade();
+
+        JTextField nomeCidade = new JTextField();
+
+        DefaultComboBoxModel<Estados> estadoEnum = new DefaultComboBoxModel<>(Estados.values());
+        JComboBox<Estados> comboBoxEstado = new JComboBox<>(estadoEnum);
+
+        Object[] message = {
+                "Nome da Cidade: ", nomeCidade,
+                "Estado: ", comboBoxEstado
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Cidades", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeCidade.getText();
+        Estados uf = (Estados) estadoEnum.getSelectedItem();
+
+        cidades.setNomeCidade(nome);
+        cidades.setEstados(Estados.valueOf(String.valueOf(uf)));
+
+        return cidades;
+
     }
 
 }

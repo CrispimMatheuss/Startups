@@ -7,14 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContatoRepository {
-        public Connection getConnection() throws ClassNotFoundException, SQLException {
-            Class.forName("org.postgresql.Driver");
-            String url = "jdbc:postgresql://localhost:5432/startup";
-            Connection connection = DriverManager.getConnection(url, "folha_owner", "");
+        public Connection getConnection() throws ClassNotFoundException, SQLException{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/XXXXXXXXXXXXX";
+            Connection connection = DriverManager.getConnection(url, "root", "");
 
             return connection;
         }
-
 
         public void insere(Contato contato) throws SQLException, ClassNotFoundException {
             Connection connection = getConnection();
@@ -92,4 +91,3 @@ public class ContatoRepository {
 
     }
 
-}

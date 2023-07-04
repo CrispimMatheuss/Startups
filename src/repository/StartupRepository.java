@@ -1,6 +1,5 @@
 package repository;
 
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import model.Startups;
 
 import java.sql.*;
@@ -10,9 +9,9 @@ import java.util.List;
 public class StartupRepository {
 
     public Connection getConnection() throws ClassNotFoundException, SQLException{
-//        Class.forName();
-        String url = "jdbc:mysql://localhost:3306/nome_do_banco_de_dados";
-        Connection connection = DriverManager.getConnection(url, "usuario", "senha");
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/XXXXXXXXXXXXX";
+        Connection connection = DriverManager.getConnection(url, "root", "");
 
         return connection;
     }
