@@ -77,7 +77,7 @@ public class CidadeRepository {
     public void delete(Cidade cidade) throws SQLException, ClassNotFoundException{
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("delete from cidade where id = ?");
+        PreparedStatement stmt = connection.prepareStatement("delete from cidade where idcidade = ?");
 
         stmt.setInt(1, cidade.getId().intValue());
 

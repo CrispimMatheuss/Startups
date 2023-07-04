@@ -125,9 +125,9 @@ public class Main {
                 cidade = editaCidade(cidade);
                 break;
             default: //Exclusão
-//                startups = selecaoDePessoa();
-//                getPessoaDAO().remover(pessoa);
-//                pessoa = null;
+                cidade = selecionaCidade();
+                getCidadeDAO().remover(cidade);
+                cidade = null;
                 break;
         }
         return cidade;
@@ -257,5 +257,7 @@ public class Main {
         return cidades;
 
     }
+
+
 
 }
