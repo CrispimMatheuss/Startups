@@ -4,6 +4,9 @@ import repository.UsuarioDAO;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -109,23 +112,43 @@ public class Main {
     }
 
     private static Startups cadastraStartup(){
+        JPopupMenu jPopupMenu;
+        JButton button;
         Startups startups = new Startups();
-//        String nome = JOptionPane.showInputDialog(null, "Digite o nome da Startup: ");
+
         JTextField nomeStartup = new JTextField();
         JTextField descStartup = new JTextField();
-        JTextField dataIninio  = new JTextField();
+        JTextField dataInicio  = new JTextField();
+
+        //Trazer as cidades
+        JComboBox<String> cidade = new JComboBox<>();
+        cidade.setModel(new DefaultComboBoxModel<>(getCidades().toArray(new String[0])));
 
         Object[] message = {
                 "Nome da Startup: ", nomeStartup,
                 "Descricao da Startup: ", descStartup,
-                "Data de Criação da Startup: ", dataIninio
+                "Data de Criação da Startup: ", dataInicio,
+                "Cidade: ", cidade
         };
 
         int option = JOptionPane.showConfirmDialog(null, message,
                 "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
 
+
+
+        String nome = nomeStartup.getText();
+        String descricao = descStartup.getText();
+        LocalDate dtInicioStartup = LocalDate.parse(dataInicio.getText());
         return startups;
 
+    }
+
+    private static List<String> getCidades() {
+        List<String> cidades = new ArrayList<>();
+        cidades.add("Criciúma");
+        cidades.add("Içara");
+        // Adicione mais cidades se necessário
+        return cidades;
     }
 
 }
