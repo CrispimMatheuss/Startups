@@ -64,7 +64,7 @@ public class CidadeRepository {
     public void update(Cidade cidade) throws SQLException, ClassNotFoundException{
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("update cidade set nome = ?, uf = ? where id = ?");
+        PreparedStatement stmt = connection.prepareStatement("update cidade set nome = ?, uf = ? where idcidade = ?");
         stmt.setString(1, cidade.getNomeCidade());
         stmt.setString(2, cidade.getEstados().getUF());
         stmt.setInt(3, cidade.getId().intValue());

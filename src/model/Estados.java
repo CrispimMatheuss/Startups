@@ -2,8 +2,8 @@ package model;
 
 public enum Estados {
 
-    SANTA_CATARINA("SC"),
-    RIO_GRANDE_DO_SUL("RS");
+    SC("SC"),
+    RS("RS");
     private String UF;
 
     Estados(String sigla){

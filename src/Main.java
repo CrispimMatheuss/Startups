@@ -113,7 +113,7 @@ public class Main {
         return startups;
     }
 
-    private static Cidade chamaCadastroCidades() throws SQLException, ClassNotFoundException {
+    public static Cidade chamaCadastroCidades() throws SQLException, ClassNotFoundException {
         Integer opcaoCrud = chamaOpcaoCrud();
         Cidade cidade = null;
         switch (opcaoCrud) {
@@ -133,7 +133,7 @@ public class Main {
         return cidade;
     }
 
-    private static Startups cadastraStartup(){
+    private static Startups cadastraStartup() throws SQLException, ClassNotFoundException {
         JPopupMenu jPopupMenu;
         JButton button;
         Startups startups = new Startups();
@@ -144,7 +144,9 @@ public class Main {
 
         //Trazer as cidades
         JComboBox<String> cidade = new JComboBox<>();
-        cidade.setModel(new DefaultComboBoxModel<>(getCidades().toArray(new String[0])));
+        CidadeDAO cidadeDAO = getCidadeDAO();
+        List<Cidade> listaCidades = cidadeDAO.buscarTodos();
+        cidade.setModel(new DefaultComboBoxModel<>(listaCidades.toArray(getCidades().toArray(new String[0]))));
 
         Object[] message = {
                 "Nome da Startup: ", nomeStartup,
@@ -248,6 +250,7 @@ public class Main {
         String nome = nomeCidade.getText();
         Estados uf = (Estados) estadoEnum.getSelectedItem();
 
+        cidades.setId(cidade.getId());
         cidades.setNomeCidade(nome);
         cidades.setEstados(Estados.valueOf(String.valueOf(uf)));
 
