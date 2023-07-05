@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Object usuarioLogado = chamaSelecaoUsuario();
         checaSenhaUsuario(usuarioLogado);
@@ -143,10 +144,21 @@ public class Main {
         JTextField dataInicio  = new JTextField();
 
         //Trazer as cidades
-        JComboBox<String> cidade = new JComboBox<>();
+        /*JComboBox<String> cidade = new JComboBox<>();
         CidadeDAO cidadeDAO = getCidadeDAO();
         List<Cidade> listaCidades = cidadeDAO.buscarTodos();
         cidade.setModel(new DefaultComboBoxModel<>(listaCidades.toArray(getCidades().toArray(new String[0]))));
+*/
+        CidadeDAO cidadeDAO = getCidadeDAO();
+        List<Cidade> listaCidades = cidadeDAO.buscarTodos();
+        String[] nomesCidades = new String[listaCidades.size()];
+
+        for(int i = 0; i < listaCidades.size(); i++){
+            nomesCidades[i] = listaCidades.get(i).getNomeCidade();
+        }
+
+        JComboBox<String> cidade = new JComboBox<>(nomesCidades);
+//        cidade.setModel(new DefaultComboBoxModel<>(listaCidades.toArray());
 
         Object[] message = {
                 "Nome da Startup: ", nomeStartup,
@@ -240,6 +252,7 @@ public class Main {
         JComboBox<Estados> comboBoxEstado = new JComboBox<>(estadoEnum);
 
         Object[] message = {
+                "Nome Anterior: " + cidade.getNomeCidade(),
                 "Nome da Cidade: ", nomeCidade,
                 "Estado: ", comboBoxEstado
         };
