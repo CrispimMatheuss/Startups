@@ -253,6 +253,7 @@ public class Main {
 
         Object[] message = {
                 "Nome Anterior: " + cidade.getNomeCidade(),
+                "UF Anterior: " + cidade.getEstados().getUF(),
                 "Nome da Cidade: ", nomeCidade,
                 "Estado: ", comboBoxEstado
         };
