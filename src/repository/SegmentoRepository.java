@@ -1,6 +1,7 @@
 package repository;
 
 import model.Segmento;
+import model.Startups;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 public class SegmentoRepository {
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        String url = "jdbc:mysql://localhost:3306/XXXXXXXXXXXXX";
+        String url = "jdbc:mysql://localhost:3306/startup";
         Connection connection = DriverManager.getConnection(url, "root", "");
 
         return connection;
@@ -19,7 +20,7 @@ public class SegmentoRepository {
         Connection connection = getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("insert into " +
-                "segmento values");
+                "segmento values (?, ?)");
         stmt.setInt(1, segmento.getId().intValue());
         stmt.setString(2, segmento.getNome());
 
@@ -47,6 +48,13 @@ public class SegmentoRepository {
         PreparedStatement stmt = connection.prepareStatement("select * from segmento");
         ResultSet resultSet = stmt.executeQuery();
 
+        while (resultSet.next()){
+            Segmento segmentoAux = new Segmento();
+            segmentoAux.setId(resultSet.getInt(1));
+            segmentoAux.setNome(resultSet.getString(2));
+            segmentoList.add(segmentoAux);
+        }
+
         connection.close();
         return segmentoList;
     }
@@ -68,9 +76,9 @@ public class SegmentoRepository {
         Connection connection = getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("update segmento " +
-                "SET id = ?, nome = ? WHERE id = ?");
-        stmt.setInt(1, segmento.getId());
-        stmt.setString(2, segmento.getNome());
+                "SET nome = ? WHERE id = ?");
+        stmt.setString(1, segmento.getNome());
+        stmt.setInt(2, segmento.getId());
 
         int i = stmt.executeUpdate();
         System.out.println(i + " linhas atualizadas");

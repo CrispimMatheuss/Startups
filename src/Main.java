@@ -1,6 +1,7 @@
 import model.*;
 import model.Usuario;
 import repository.CidadeDAO;
+import repository.SegmentoDAO;
 import repository.StartupDAO;
 import repository.UsuarioDAO;
 
@@ -8,7 +9,6 @@ import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -58,7 +58,7 @@ public class Main {
     }
 
     private static void chamaMenuCadastros() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenuCadastro = {"Startups", "Cidades", "Voltar"};
+        String[] opcoesMenuCadastro = {"Startups", "Cidades", "Segmentos", "Voltar"};
         int menuCadastro = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Cadastros",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuCadastro, opcoesMenuCadastro[0]);
@@ -74,7 +74,12 @@ public class Main {
                 if (cidade != null) getCidadeDAO().salvar(cidade);
                 chamaMenuCadastros();
                 break;
-            case 2: //Voltar
+            case 2: //Segmentos
+                Segmento segmento = chamaCadastroSegmento();
+                if (segmento != null) getSegmentoDAO().salvar(segmento);
+                chamaMenuCadastros();
+                break;
+            case 3: //Voltar
                 chamaMenuPrincipal();
                 break;
         }
@@ -134,6 +139,29 @@ public class Main {
 
         }
         return cidade;
+    }
+
+    private static Segmento chamaCadastroSegmento() throws SQLException, ClassNotFoundException {
+        Integer opcaoCrud = chamaOpcaoCrud();
+        Segmento segmento = null;
+        switch (opcaoCrud) {
+            case 0: //Inserção
+                segmento = cadastraSegmento();
+                break;
+            case 1: //Alteração
+                segmento = selecionaSegmento();
+                segmento = editaSegmento(segmento);
+                break;
+            case 2: //Exclusão
+//                segmento = selecionaSegmento();
+                getSegmentoDAO().remover(segmento);
+                segmento = null;
+                break;
+            default: //Voltar
+                chamaMenuCadastros();
+                break;
+        }
+        return segmento;
     }
 
     private static Startups cadastraStartup() throws SQLException, ClassNotFoundException {
@@ -216,6 +244,23 @@ public class Main {
 
     }
 
+    private static Segmento cadastraSegmento(){
+
+        Segmento segmento = new Segmento();
+
+        JTextField nomeSegmento = new JTextField();
+
+        Object[] message = {
+                "Nome do Segmento: ", nomeSegmento};
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Segmentos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeSegmento.getText();
+        segmento.setNome(nome);
+        return segmento;
+
+    }
     public static StartupDAO getStartupDAO(){
         StartupDAO startupDAO = new StartupDAO();
         return startupDAO;
@@ -224,6 +269,11 @@ public class Main {
     public static CidadeDAO getCidadeDAO(){
         CidadeDAO cidadeDAO = new CidadeDAO();
         return cidadeDAO;
+    }
+
+    public static SegmentoDAO getSegmentoDAO(){
+        SegmentoDAO segmentoDAO = new SegmentoDAO();
+        return segmentoDAO;
     }
 
     public static Cidade selecionaCidade(){
@@ -329,6 +379,28 @@ public class Main {
     }
 
 
+    private static Segmento editaSegmento(Segmento segmento){
+        Segmento segmentos = new Segmento();
+
+        JTextField nomeSegmento = new JTextField();
+
+        Object[] message = {
+                "Nome Anterior: " + segmento.getNome(),
+                "Nome do Segmento: ", nomeSegmento
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Segmentos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeSegmento.getText();
+        segmentos.setId(segmento.getId());
+        segmentos.setNome(nome);
+
+        return segmentos;
+
+    }
+
+
     public static Startups selecionaStartup(){
             Object[] selectionValues = new Object[0];
             try {
@@ -345,5 +417,15 @@ public class Main {
             return startups.get(0);
         }
 
+    public static Segmento selecionaSegmento() throws SQLException {
+        Object[] selectionValues = new Object[0];
+        selectionValues = getSegmentoDAO().findSegmentosInArray();
+
+        String initialSelection = (String) selectionValues[0];
+        Object selection = JOptionPane.showInputDialog(null, "Selecione a Startup", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        List<Segmento> segmento = getSegmentoDAO().buscarPorNome((String) selection);
+
+        return segmento.get(0);
+    }
 
 }

@@ -54,7 +54,7 @@ public class SegmentoDAO {
         return segmentosFiltrados;
     }
 
-    public Object[] findContatosInArray() {
+    public Object[] findSegmentosInArray() {
         List<Segmento> segmentoList = buscarTodos();
         List<String> nomeSegmentos = new ArrayList<>();
 

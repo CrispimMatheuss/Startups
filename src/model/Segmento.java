@@ -4,11 +4,6 @@ public class Segmento {
     private Integer id;
     private String nome;
 
-    public Segmento(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
     public Integer getId() {
         return id;
     }
