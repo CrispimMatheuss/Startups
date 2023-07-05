@@ -70,9 +70,15 @@ public class StartupRepository {
         Connection connection = getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("update startup " +
-           "set nome = ? where id = ?" );
+           "set nome = ?, descricao = ?, data_inicio = ?, endereco = ?, desc_solucoes = ?, idcidade = ? where idstartup = ?" );
 
         stmt.setString(1, startups.getNomeStartup());
+        stmt.setString(2, startups.getDescStartup());
+        stmt.setDate(3, Date.valueOf(startups.getDataInicio()));
+        stmt.setString(4, startups.getEnderecoStartup());
+        stmt.setString(5, startups.getDescSolucoes());
+        stmt.setInt(6, startups.getCodigoCidade());
+        stmt.setInt(7, startups.getId().intValue());
 
         int i = stmt.executeUpdate();
         System.out.println(i + " linhas atualizadas!");
@@ -81,8 +87,12 @@ public class StartupRepository {
 
     public void delete(Startups startups) throws  SQLException, ClassNotFoundException{
         Connection connection = getConnection();
-        PreparedStatement stmt = connection.prepareStatement("delete from startup where id = ?");
+        PreparedStatement stmt = connection.prepareStatement("delete from startup where idstartup = ?");
         stmt.setInt(1, startups.getId().intValue());
+
+        stmt.executeUpdate();
+
+        connection.close();
     }
 
     public List<Startups> busca() throws SQLException,ClassNotFoundException{

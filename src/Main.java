@@ -74,11 +74,6 @@ public class Main {
                 if (cidade != null) getCidadeDAO().salvar(cidade);
                 chamaMenuCadastros();
                 break;
-//            case 2: //Seguro
-//                /*Seguro seguro = chamaCadastroSeguro();
-//                if (seguro != null) getSeguroDAO().salvar(seguro);*/
-//                chamaMenuCadastros();
-//                break;
             case 2: //Voltar
                 chamaMenuPrincipal();
                 break;
@@ -104,9 +99,9 @@ public class Main {
                 startups = editaStartup(startups);
                 break;
             case 2: //Exclusão
-//                startups = selecaoDePessoa();
-//                getPessoaDAO().remover(pessoa);
-//                pessoa = null;
+                startups = selecionaStartup();
+                getStartupDAO().remover(startups);
+                startups = null;
                 break;
             default: //Voltar
                 chamaMenuCadastros();
@@ -304,6 +299,7 @@ public class Main {
         JComboBox<String> cidade = new JComboBox<>(nomesCidades);
 
         Object[] message = {
+                "Nome Anterior: ", startup.getNomeStartup(),
                 "Nome da Startup: ", nomeStartup,
                 "Descricao da Startup: ", descStartup,
                 "Data de Criação da Startup (dd/mm/yyyy): ", dataInicio,
@@ -319,6 +315,7 @@ public class Main {
         int indiceSelecionado = cidade.getSelectedIndex();
         int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
 
+        startups.setId(startup.getId());
         startups.setNomeStartup(nomeStartup.getText());
         startups.setDescStartup(descStartup.getText());
         LocalDate data = LocalDate.parse(dataInicio.getText(), formatter);
