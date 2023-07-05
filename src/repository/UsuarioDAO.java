@@ -14,12 +14,7 @@ public final class UsuarioDAO {
         usuario.setLogin("admin");
         usuario.setSenha("admin");
 
-        Usuario usuario1 = new Usuario();
-        usuario1.setSenha("normal");
-        usuario1.setLogin("normal");
-
         usuarios.add(usuario);
-        usuarios.add(usuario1);
 
         return usuarios;
     }

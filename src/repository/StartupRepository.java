@@ -3,14 +3,15 @@ package repository;
 import model.Startups;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StartupRepository {
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException{
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        String url = "jdbc:mysql://localhost:3306/XXXXXXXXXXXXX";
+        String url = "jdbc:mysql://localhost:3306/startup";
         Connection connection = DriverManager.getConnection(url, "root", "");
 
         return connection;
@@ -19,7 +20,18 @@ public class StartupRepository {
     public void insere(Startups startups) throws SQLException, ClassNotFoundException{
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("insert into startup values()");
+        PreparedStatement stmt = connection.prepareStatement("insert into startup (idstartup, nome, descricao, data_inicio, endereco, desc_solucoes, idcidade) values(?,?,?,?,?,?,?)");
+        stmt.setInt(1, startups.getId().intValue());
+        stmt.setString(2, startups.getNomeStartup());
+        stmt.setString(3, startups.getDescStartup());
+        stmt.setDate(4, Date.valueOf(startups.getDataInicio()));
+        stmt.setString(5, startups.getEnderecoStartup());
+        stmt.setString(6, startups.getDescSolucoes());
+        stmt.setInt(7, startups.getCodigoCidade());
+
+        int i = stmt.executeUpdate();
+        System.out.println(i + " linhas inseridas");
+        connection.close();
 
     }
 
@@ -84,6 +96,12 @@ public class StartupRepository {
         while (resultSet.next()){
             Startups startupsAux = new Startups();
             startupsAux.setId(resultSet.getLong(1));
+            startupsAux.setNomeStartup(resultSet.getString(2));
+            startupsAux.setDescStartup(resultSet.getString(3));
+            startupsAux.setDataInicio(resultSet.getDate(4).toLocalDate());
+            startupsAux.setEnderecoStartup(resultSet.getString(5));
+            startupsAux.setDescSolucoes(resultSet.getString(6));
+            startupsAux.setCodigoCidade(resultSet.getInt(8));
             startups.add(startupsAux);
         }
 

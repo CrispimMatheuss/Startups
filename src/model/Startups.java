@@ -8,6 +8,15 @@ public class Startups extends Entity{
     private LocalDate dataInicio;
     private Integer codigoCidade;
     private String enderecoStartup;
+    private String descSolucoes;
+
+    public String getDescSolucoes() {
+        return descSolucoes;
+    }
+
+    public void setDescSolucoes(String descSolucoes) {
+        this.descSolucoes = descSolucoes;
+    }
 
     public Startups() {
 

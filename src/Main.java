@@ -7,6 +7,7 @@ import repository.UsuarioDAO;
 import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Main {
     }
 
     private static void chamaMenuPrincipal() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenu = {"Cadastros", "Processos", "Relatorios", "Sair"};
+        String[] opcoesMenu = {"Cadastros", "Relatorios", "Sair"};
         int opcao = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Principal",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenu, opcoesMenu[0]);
@@ -47,13 +48,10 @@ public class Main {
             case 0: //Cadastros
                 chamaMenuCadastros();
                 break;
-            case 1: //Processos
-                //chamaMenuProcessos();
-                break;
-            case 2: //Relatorios
+            case 1: //Relatorios
                 //chamaMenuRelatorios();
                 break;
-            case 3: //SAIR
+            case 2: //SAIR
                 System.exit(0);
                 break;
         }
@@ -76,19 +74,19 @@ public class Main {
                 if (cidade != null) getCidadeDAO().salvar(cidade);
                 chamaMenuCadastros();
                 break;
-            case 2: //Seguro
-                /*Seguro seguro = chamaCadastroSeguro();
-                if (seguro != null) getSeguroDAO().salvar(seguro);*/
-                chamaMenuCadastros();
-                break;
-            case 3: //Voltar
+//            case 2: //Seguro
+//                /*Seguro seguro = chamaCadastroSeguro();
+//                if (seguro != null) getSeguroDAO().salvar(seguro);*/
+//                chamaMenuCadastros();
+//                break;
+            case 2: //Voltar
                 chamaMenuPrincipal();
                 break;
         }
     }
 
     private static Integer chamaOpcaoCrud() {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
         int tipoOpcao = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Operação no cadastro: ",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -102,13 +100,16 @@ public class Main {
                 startups = cadastraStartup();
                 break;
             case 1: //Alteração
-//                startups = selecaoDePessoa();
-//                startups = editaPessoa(pessoa);
+                startups = selecionaStartup();
+                startups = editaStartup(startups);
                 break;
-            default: //Exclusão
+            case 2: //Exclusão
 //                startups = selecaoDePessoa();
 //                getPessoaDAO().remover(pessoa);
 //                pessoa = null;
+                break;
+            default: //Voltar
+                chamaMenuCadastros();
                 break;
         }
         return startups;
@@ -125,11 +126,17 @@ public class Main {
                 cidade = selecionaCidade();
                 cidade = editaCidade(cidade);
                 break;
-            default: //Exclusão
+
+            case 2: //Exclusão
                 cidade = selecionaCidade();
                 getCidadeDAO().remover(cidade);
                 cidade = null;
                 break;
+
+            default: //Voltar
+                chamaMenuCadastros();
+                break;
+
         }
         return cidade;
     }
@@ -142,13 +149,12 @@ public class Main {
         JTextField nomeStartup = new JTextField();
         JTextField descStartup = new JTextField();
         JTextField dataInicio  = new JTextField();
+        JTextField rua         = new JTextField();
+        JTextField bairro      = new JTextField();
+        JTextField descSolucoes= new JTextField();
 
-        //Trazer as cidades
-        /*JComboBox<String> cidade = new JComboBox<>();
-        CidadeDAO cidadeDAO = getCidadeDAO();
-        List<Cidade> listaCidades = cidadeDAO.buscarTodos();
-        cidade.setModel(new DefaultComboBoxModel<>(listaCidades.toArray(getCidades().toArray(new String[0]))));
-*/
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         CidadeDAO cidadeDAO = getCidadeDAO();
         List<Cidade> listaCidades = cidadeDAO.buscarTodos();
         String[] nomesCidades = new String[listaCidades.size()];
@@ -158,23 +164,31 @@ public class Main {
         }
 
         JComboBox<String> cidade = new JComboBox<>(nomesCidades);
-//        cidade.setModel(new DefaultComboBoxModel<>(listaCidades.toArray());
 
         Object[] message = {
                 "Nome da Startup: ", nomeStartup,
                 "Descricao da Startup: ", descStartup,
-                "Data de Criação da Startup: ", dataInicio,
+                "Data de Criação da Startup (dd/mm/yyyy): ", dataInicio,
+                "Descrição das Soluções: ", descSolucoes,
+                "Rua: ", rua,
+                "Bairro: ", bairro,
                 "Cidade: ", cidade
         };
 
         int option = JOptionPane.showConfirmDialog(null, message,
                 "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
 
+        int indiceSelecionado = cidade.getSelectedIndex();
+        int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
 
+        startups.setNomeStartup(nomeStartup.getText());
+        startups.setDescStartup(descStartup.getText());
+        LocalDate data = LocalDate.parse(dataInicio.getText(), formatter);
+        startups.setDataInicio(data);
+        startups.setCodigoCidade(codigoCidade);
+        startups.setEnderecoStartup(rua.getText() + " - " + bairro.getText());
+        startups.setDescSolucoes(descSolucoes.getText());
 
-        String nome = nomeStartup.getText();
-        String descricao = descStartup.getText();
-        LocalDate dtInicioStartup = LocalDate.parse(dataInicio.getText());
         return startups;
 
     }
@@ -205,14 +219,6 @@ public class Main {
 
         return cidades;
 
-    }
-
-    private static List<String> getCidades() {
-        List<String> cidades = new ArrayList<>();
-        cidades.add("Criciúma");
-        cidades.add("Içara");
-        // Adicione mais cidades se necessário
-        return cidades;
     }
 
     public static StartupDAO getStartupDAO(){
@@ -272,6 +278,75 @@ public class Main {
 
     }
 
+
+    private static Startups editaStartup(Startups startup) throws SQLException, ClassNotFoundException {
+        JPopupMenu jPopupMenu;
+        JButton button;
+        Startups startups = new Startups();
+
+        JTextField nomeStartup = new JTextField();
+        JTextField descStartup = new JTextField();
+        JTextField dataInicio  = new JTextField();
+        JTextField rua         = new JTextField();
+        JTextField bairro      = new JTextField();
+        JTextField descSolucoes= new JTextField();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        CidadeDAO cidadeDAO = getCidadeDAO();
+        List<Cidade> listaCidades = cidadeDAO.buscarTodos();
+        String[] nomesCidades = new String[listaCidades.size()];
+
+        for(int i = 0; i < listaCidades.size(); i++){
+            nomesCidades[i] = listaCidades.get(i).getNomeCidade();
+        }
+
+        JComboBox<String> cidade = new JComboBox<>(nomesCidades);
+
+        Object[] message = {
+                "Nome da Startup: ", nomeStartup,
+                "Descricao da Startup: ", descStartup,
+                "Data de Criação da Startup (dd/mm/yyyy): ", dataInicio,
+                "Descrição das Soluções: ", descSolucoes,
+                "Rua: ", rua,
+                "Bairro: ", bairro,
+                "Cidade: ", cidade
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
+
+        int indiceSelecionado = cidade.getSelectedIndex();
+        int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
+
+        startups.setNomeStartup(nomeStartup.getText());
+        startups.setDescStartup(descStartup.getText());
+        LocalDate data = LocalDate.parse(dataInicio.getText(), formatter);
+        startups.setDataInicio(data);
+        startups.setCodigoCidade(codigoCidade);
+        startups.setEnderecoStartup(rua.getText() + " - " + bairro.getText());
+        startups.setDescSolucoes(descSolucoes.getText());
+
+        return startups;
+
+    }
+
+
+    public static Startups selecionaStartup(){
+            Object[] selectionValues = new Object[0];
+            try {
+                selectionValues = getStartupDAO().findStartupsInArray();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            String initialSelection = (String) selectionValues[0];
+                Object selection = JOptionPane.showInputDialog(null, "Selecione a Startup", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+                List<Startups> startups = getStartupDAO().buscarPorNome((String) selection);
+
+            return startups.get(0);
+        }
 
 
 }
