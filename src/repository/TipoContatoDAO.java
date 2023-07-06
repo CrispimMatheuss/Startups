@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TipoContadoDAO {
+public class TipoContatoDAO {
     public static List<TipoContato> tipoContatos = new ArrayList<>();
         public void salvar(TipoContato tipoContato) {
             TipoContatoRepository tipoContatoRepository = new TipoContatoRepository();
