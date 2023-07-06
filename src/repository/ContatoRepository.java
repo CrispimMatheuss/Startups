@@ -9,7 +9,7 @@ import java.util.List;
 public class ContatoRepository {
         public Connection getConnection() throws ClassNotFoundException, SQLException{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/XXXXXXXXXXXXX";
+            String url = "jdbc:mysql://localhost:3306/startup";
             Connection connection = DriverManager.getConnection(url, "root", "");
 
             return connection;

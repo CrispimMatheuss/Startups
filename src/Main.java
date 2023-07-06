@@ -1,9 +1,6 @@
 import model.*;
 import model.Usuario;
-import repository.CidadeDAO;
-import repository.SegmentoDAO;
-import repository.StartupDAO;
-import repository.UsuarioDAO;
+import repository.*;
 
 import javax.swing.*;
 import java.sql.SQLException;
@@ -52,13 +49,20 @@ public class Main {
                 //chamaMenuRelatorios();
                 break;
             case 2: //SAIR
-                System.exit(0);
+                int opcaoSair= JOptionPane.showOptionDialog(null, "Deseja realmente sair?",
+                        "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+                if (opcaoSair == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else {
+                    chamaMenuPrincipal();
+                }
                 break;
         }
     }
 
     private static void chamaMenuCadastros() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenuCadastro = {"Startups", "Cidades", "Segmentos", "Voltar"};
+        String[] opcoesMenuCadastro = {"Startups", "Cidades", "Segmentos", "Contatos", "Voltar"};
         int menuCadastro = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Cadastros",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuCadastro, opcoesMenuCadastro[0]);
@@ -79,7 +83,12 @@ public class Main {
                 if (segmento != null) getSegmentoDAO().salvar(segmento);
                 chamaMenuCadastros();
                 break;
-            case 3: //Voltar
+            case 3: //Contatos
+                Contato contato = chamaCadastroContato();
+                if (contato != null) getContatoDAO().salvar(contato);
+                chamaMenuCadastros();
+                break;
+            case 4: //Voltar
                 chamaMenuPrincipal();
                 break;
         }
@@ -276,6 +285,11 @@ public class Main {
         return segmentoDAO;
     }
 
+    public static ContatoDAO getContatoDAO(){
+        ContatoDAO contatoDAO = new ContatoDAO();
+        return contatoDAO;
+    }
+
     public static Cidade selecionaCidade(){
         Object[] selectionValues = new Object[0];
         try {
@@ -427,5 +441,91 @@ public class Main {
 
         return segmento.get(0);
     }
+
+
+
+    public static Contato chamaCadastroContato() throws SQLException, ClassNotFoundException {
+        Integer opcaoCrud = chamaOpcaoCrud();
+        Contato contato = null;
+        switch (opcaoCrud) {
+            case 0: //Inserção
+                contato = cadastraContato();
+                break;
+            case 1: //Alteração
+                contato = selecionaContato();
+                contato = editaContato(contato);
+                break;
+
+            case 2: //Exclusão
+                contato = selecionaContato();
+                getContatoDAO().remover(contato);
+                contato = null;
+                break;
+
+            default: //Voltar
+                chamaMenuCadastros();
+                break;
+
+        }
+        return contato;
+    }
+
+
+    private static Contato cadastraContato(){
+        JPopupMenu jPopupMenu;
+        JButton button;
+        Contato contato= new Contato();
+
+        JTextField nomeContato = new JTextField();
+
+        Object[] message = {
+                "Nome do contato: ", nomeContato,
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de contatos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeContato.getText();
+
+        contato.setNome(nome);
+
+        return contato;
+
+    }
+
+    public static Contato selecionaContato(){
+        Object[] selectionValues = new Object[0];
+        selectionValues = getContatoDAO().findContatosInArray();
+        String initialSelection = (String) selectionValues[0];
+        Object selection = JOptionPane.showInputDialog(null, "Selecione o contato", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        List<Contato> contatoList = getContatoDAO().buscarPorNome((String) selection);
+
+        return contatoList.get(0);
+    }
+
+    private static Contato editaContato(Contato contato){
+        JPopupMenu jPopupMenu;
+        JButton button;
+        Contato contato1 = new Contato();
+
+        JTextField nomeContato = new JTextField();
+
+        Object[] message = {
+                "Nome anterior: " + contato1.getNome(),
+                "Nome do contato: ", nomeContato,
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de contatos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeContato.getText();
+
+        contato1.setId(contato1.getId());
+        contato1.setNome(nome);
+
+        return contato1;
+    }
+
+
 
 }
