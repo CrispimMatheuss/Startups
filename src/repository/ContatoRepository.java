@@ -19,11 +19,8 @@ public class ContatoRepository {
             Connection connection = getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("insert into " +
-                    "contato values(?, ?, ?, ?)");
-            stmt.setInt(1, contato.getId().intValue());
+                    "contato values(null, ?");
             stmt.setString(2, contato.getNome());
-//            stmt.setString(3, contato.getDocumento());
-//            stmt.setInt(4, contato.getTipo().ordinal());
 
             int i = stmt.executeUpdate();
             System.out.println(i + " linhas inseridas");
