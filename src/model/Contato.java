@@ -4,10 +4,6 @@ public class Contato {
     private Integer id;
     private String nome;
 
-    public Contato(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
 
     public Integer getId() {
         return id;
