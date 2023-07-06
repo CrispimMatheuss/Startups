@@ -20,14 +20,15 @@ public class StartupRepository {
     public void insere(Startups startups) throws SQLException, ClassNotFoundException{
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("insert into startup (idstartup, nome, descricao, data_inicio, endereco, desc_solucoes, idcidade) values(?,?,?,?,?,?,?)");
-        stmt.setInt(1, startups.getId().intValue());
-        stmt.setString(2, startups.getNomeStartup());
-        stmt.setString(3, startups.getDescStartup());
-        stmt.setDate(4, Date.valueOf(startups.getDataInicio()));
-        stmt.setString(5, startups.getEnderecoStartup());
-        stmt.setString(6, startups.getDescSolucoes());
-        stmt.setInt(7, startups.getCodigoCidade());
+        PreparedStatement stmt = connection.prepareStatement("insert into startup (idstartup, nome, descricao, data_inicio, endereco, desc_solucoes, idsegmento, idcidade) values(null,?,?,?,?,?,null,?)");
+        //stmt.setInt(1, startups.getId().intValue());
+        stmt.setString(1, startups.getNomeStartup());
+        stmt.setString(2, startups.getDescStartup());
+        stmt.setDate(3, Date.valueOf(startups.getDataInicio()));
+        stmt.setString(4, startups.getEnderecoStartup());
+        stmt.setString(5, startups.getDescSolucoes());
+        //stmt.setInt(7, startups.getId());
+        stmt.setInt(6, startups.getCodigoCidade());
 
         int i = stmt.executeUpdate();
         System.out.println(i + " linhas inseridas");

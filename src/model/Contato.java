@@ -1,11 +1,13 @@
 package model;
 
-public class Contato {
-    private Integer id;
+public class Contato extends Entity{
+    private Long id;
     private String nome;
+    private Integer idStartup;
+    private Integer idTipoContato;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -13,7 +15,7 @@ public class Contato {
         return nome;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -21,11 +23,29 @@ public class Contato {
         this.nome = nome;
     }
 
+    public Integer getIdStartup() {
+        return idStartup;
+    }
+
+    public Integer getIdTipoContato() {
+        return idTipoContato;
+    }
+
+    public void setIdStartup(Integer idStartup) {
+        this.idStartup = idStartup;
+    }
+
+    public void setIdTipoContato(Integer idTipoContato) {
+        this.idTipoContato = idTipoContato;
+    }
+
     @Override
     public String toString() {
-        return "contato{" +
+        return "Contato{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
+                ", idStartup=" + idStartup +
+                ", idTipoContato=" + idTipoContato +
                 '}';
     }
 }
