@@ -394,9 +394,9 @@ public class Main {
         return segmentoDAO;
     }
 
-    public static TipoContadoDAO getTipoContatoDAO(){
-        TipoContadoDAO tipoContadoDAO = new TipoContadoDAO();
-        return tipoContadoDAO;
+    public static TipoContatoDAO getTipoContatoDAO(){
+        TipoContatoDAO tipoContatoDAO = new TipoContatoDAO();
+        return tipoContatoDAO;
     }
 
     public static StartupDAO getStartupDAO(){
