@@ -3,6 +3,7 @@ package repository;
 import model.Segmento;
 import model.Startups;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,9 @@ public class SegmentoRepository {
         stmt.setString(2, segmento.getNome());
 
         int i = stmt.executeUpdate();
-        System.out.println(i + " linhas inseridas");
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Segmento inserido!");
+        }
         connection.close();
     }
 
@@ -80,18 +83,39 @@ public class SegmentoRepository {
         stmt.setString(1, segmento.getNome());
         stmt.setInt(2, segmento.getId().intValue());
         int i = stmt.executeUpdate();
-        System.out.println(i + " linhas atualizadas");
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Segmento atualizado!");
+        }
         connection.close();
     }
 
 
     public void delete(Segmento segmento) throws SQLException, ClassNotFoundException {
         Connection connection = getConnection();
-        PreparedStatement stmt = connection.prepareStatement("DELETE FROM segmento" +
-                " WHERE id = ?");
-        stmt.setInt(1, segmento.getId().intValue());
-        stmt.executeUpdate();
-        connection.close();
+        int count = 0;
+
+        PreparedStatement stmt2 = connection.prepareStatement("select count(*) from startup where idsegmento = ?");
+        stmt2.setInt(1, segmento.getId().intValue());
+        ResultSet resultSet = stmt2.executeQuery();
+
+        while(resultSet.next()){
+            count = resultSet.getInt(1);
+            if (count > 0){
+                JOptionPane.showMessageDialog(null, "Não é possível excluir o segmento pois ele está vinculado à alguma Startup!");
+            }
+        }
+
+        if (count == 0) {
+
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM segmento" +
+                    " WHERE id = ?");
+            stmt.setInt(1, segmento.getId().intValue());
+            int i = stmt.executeUpdate();
+            if (i > 0) {
+                JOptionPane.showMessageDialog(null, "Segmento excluído!");
+            }
+            connection.close();
+        }
     }
 
 }

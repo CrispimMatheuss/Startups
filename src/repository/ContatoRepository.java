@@ -3,6 +3,7 @@ package repository;
 import model.Contato;
 import model.Startups;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,9 @@ public class ContatoRepository {
             stmt.setInt(3, Math.toIntExact(contato.getId()));
 
             int i = stmt.executeUpdate();
-            System.out.println(i + " linhas inseridas");
+            if (i > 0){
+                JOptionPane.showMessageDialog(null, "Contato inserido!");
+            }
             connection.close();
         }
 
@@ -89,7 +92,9 @@ public class ContatoRepository {
             stmt.setString(1, contato.getNome());
 
             int i = stmt.executeUpdate();
-            System.out.println(i + " linhas atualizadas");
+            if (i > 0){
+                JOptionPane.showMessageDialog(null, "Contato atualizado!");
+            }
             connection.close();
         }
 
@@ -99,7 +104,10 @@ public class ContatoRepository {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM contato" +
                     " where id = ?");
             stmt.setInt(1, contato.getId().intValue());
-            stmt.executeUpdate();
+            int i = stmt.executeUpdate();
+            if (i > 0){
+                JOptionPane.showMessageDialog(null, "Segmento excluido!");
+            }
             connection.close();
         }
 
