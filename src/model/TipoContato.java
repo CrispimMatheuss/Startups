@@ -4,10 +4,6 @@ public class TipoContato {
     private Integer id;
     private String nome;
 
-    public TipoContato(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
 
     public Integer getId() {
         return id;

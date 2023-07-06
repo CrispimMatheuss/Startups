@@ -10,7 +10,7 @@ import java.util.List;
 public class TipoContatoRepository {
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        String url = "jdbc:mysql://localhost:3306/XXXXXXXXXXXXX";
+        String url = "jdbc:mysql://localhost:3306/startup";
         Connection connection = DriverManager.getConnection(url, "root", "");
 
         return connection;
@@ -19,8 +19,12 @@ public class TipoContatoRepository {
     public void insere (TipoContato tipoContato) throws SQLException, ClassNotFoundException {
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO TipoContato VALUES()");
+        PreparedStatement stmt = connection.prepareStatement("insert into tipocontato values(null, ?)");
+        stmt.setString(1, tipoContato.getNome());
 
+        int i = stmt.executeUpdate();
+        System.out.println(i + " linhas inseridas");
+        connection.close();
     }
 
     public List<TipoContato> buscaPorId(Long id) throws SQLException, ClassNotFoundException {
@@ -62,7 +66,7 @@ public class TipoContatoRepository {
     public void update(TipoContato tipoContato) throws SQLException, ClassNotFoundException {
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("update TipoContato  +" + "  SET id = ?, nome = ? WHERE id = ?");
+        PreparedStatement stmt = connection.prepareStatement("update tipocontato set id = ?, nome = ? where id = ?");
 
         stmt.setInt(1, tipoContato.getId());
         stmt.setString(2, tipoContato.getNome());

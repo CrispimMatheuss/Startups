@@ -5,32 +5,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContatoDAO {
+public class ContatoDAO implements IGenericDAO<Contato> {
         static List<Contato> contatos = new ArrayList<>();
 
-        public void salvar(Contato contato) {
+        @Override
+        public void salvar(Contato objeto) {
             ContatoRepository contatoRepository = new ContatoRepository();
             try {
-                if (contato.getId() != null) {
-                    contatoRepository.update(contato);
+                if (objeto.getId() != null) {
+                    contatoRepository.update(objeto);
                 } else {
-                    contato.setId(contatoRepository.proximoId().intValue());
-                    contatoRepository.insere(contato);
+                    objeto.setId((long) contatoRepository.proximoId().intValue());
+                    contatoRepository.insere(objeto);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-
-            contatos.add(contato);
+            contatos.add(objeto);
         }
 
-
-        public void remover(Contato contato) throws SQLException, ClassNotFoundException {
+        @Override
+        public void remover(Contato objeto) throws SQLException, ClassNotFoundException {
             ContatoRepository contatoRepository = new ContatoRepository();
-            contatoRepository.delete(contato);
+            contatoRepository.delete(objeto);
         }
 
-
+        @Override
         public List<Contato> buscarTodos() {
             System.out.println(contatos);
 
@@ -40,11 +40,10 @@ public class ContatoDAO {
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-
             return contatos;
         }
 
-
+        @Override
         public List<Contato> buscarPorNome(String nome) {
             List<Contato> contatosFiltrados = new ArrayList<>();
             for (Contato contato : contatos) {

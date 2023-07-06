@@ -1,6 +1,7 @@
 package repository;
 
 import model.Contato;
+import model.Startups;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,8 +20,10 @@ public class ContatoRepository {
             Connection connection = getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("insert into " +
-                    "contato values(null, ?");
-            stmt.setString(2, contato.getNome());
+                    "contato(id, nome, idstartup, id) values(null, ?, ?, ?");
+            stmt.setString(1, contato.getNome());
+            stmt.setInt(2, contato.getIdStartup());
+            stmt.setInt(3, Math.toIntExact(contato.getId()));
 
             int i = stmt.executeUpdate();
             System.out.println(i + " linhas inseridas");
@@ -31,9 +34,15 @@ public class ContatoRepository {
             List<Contato> listContato = new ArrayList<>();
             Connection connection = getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("select * from contato WHERE id = ?");
+            PreparedStatement stmt = connection.prepareStatement("select * from contato where id = ?");
             stmt.setLong(1, id);
             ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()){
+                Contato contatoAux = new Contato();
+                contatoAux.setId(resultSet.getLong(1));
+                listContato.add(contatoAux);
+            }
 
             connection.close();
             return listContato;
@@ -45,6 +54,15 @@ public class ContatoRepository {
 
             PreparedStatement stmt = connection.prepareStatement("select * from contato");
             ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()){
+                Contato contatoAux = new Contato();
+                contatoAux.setId(resultSet.getLong(1));
+                contatoAux.setNome(resultSet.getString(2));
+                contatoAux.setIdStartup(resultSet.getInt(3));
+                contatoAux.setIdTipoContato(resultSet.getInt(4));
+                listContato.add(contatoAux);
+            }
 
             connection.close();
             return listContato;
@@ -68,8 +86,7 @@ public class ContatoRepository {
 
             PreparedStatement stmt = connection.prepareStatement("update contato " +
                     "SET id = ?, nome = ? WHERE id = ?");
-            stmt.setInt(1, contato.getId());
-            stmt.setString(2, contato.getNome());
+            stmt.setString(1, contato.getNome());
 
             int i = stmt.executeUpdate();
             System.out.println(i + " linhas atualizadas");
@@ -80,7 +97,7 @@ public class ContatoRepository {
         public void delete(Contato contato) throws SQLException, ClassNotFoundException {
             Connection connection = getConnection();
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM contato" +
-                    " WHERE id = ?");
+                    " where id = ?");
             stmt.setInt(1, contato.getId().intValue());
             stmt.executeUpdate();
             connection.close();

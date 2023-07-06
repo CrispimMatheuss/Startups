@@ -34,103 +34,93 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Senha incorreta!");
             checaSenhaUsuario(usuarioLogado);
         }
+
     }
 
     private static void chamaMenuPrincipal() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenu = {"Cadastros", "Relatorios", "Sair"};
+        String[] opcoesMenu = {"Cidades", "Segmento", "Tipo de contato", "Startups", "Contatos", "Sair"}; //{"Cadastros", "Relatorios", "Sair"};
         int opcao = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Principal",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenu, opcoesMenu[0]);
+
         switch (opcao) {
-            case 0: //Cadastros
-                chamaMenuCadastros();
-                break;
-            case 1: //Relatorios
-                //chamaMenuRelatorios();
-                break;
-            case 2: //SAIR
-                int opcaoSair= JOptionPane.showOptionDialog(null, "Deseja realmente sair?",
-                        "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-                if (opcaoSair == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else {
-                    chamaMenuPrincipal();
-                }
-                break;
-        }
-    }
-
-    private static void chamaMenuCadastros() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenuCadastro = {"Startups", "Cidades", "Segmentos", "Contatos", "Voltar"};
-        int menuCadastro = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
-                "Menu Cadastros",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuCadastro, opcoesMenuCadastro[0]);
-
-        switch (menuCadastro) {
-            case 0: //Startups
-                Startups startups = chamaCadastroStartup();
-                if (startups != null) getStartupDAO().salvar(startups);
-                chamaMenuCadastros();
-                break;
-            case 1: //Cidades
-                Cidade cidade = chamaCadastroCidades();
-                if (cidade != null) getCidadeDAO().salvar(cidade);
-                chamaMenuCadastros();
-                break;
-            case 2: //Segmentos
-                Segmento segmento = chamaCadastroSegmento();
-                if (segmento != null) getSegmentoDAO().salvar(segmento);
-                chamaMenuCadastros();
-                break;
-            case 3: //Contatos
-                Contato contato = chamaCadastroContato();
-                if (contato != null) getContatoDAO().salvar(contato);
-                chamaMenuCadastros();
-                break;
-            case 4: //Voltar
+            case 0: //Cidades
+                Cidade cidades= chamaCadastroCidades();
+                if (cidades != null) getCidadeDAO().salvar(cidades);
                 chamaMenuPrincipal();
                 break;
+            case 1: //Segmento
+                Segmento segmento= chamaCadastroSegmento();
+                if (segmento != null) getSegmentoDAO().salvar(segmento);
+                chamaMenuPrincipal();
+                break;
+            case 2: //Tipo de contato
+                TipoContato tipoContato= chamaCadastroTipoContato();
+                if (tipoContato != null) getTipoContatoDAO().salvar(tipoContato);
+                chamaMenuPrincipal();
+                break;
+            case 3: //Startups
+                Startups startups= chamaCadastroStartup();
+                if (startups != null) getStartupDAO().salvar(startups);
+                chamaMenuPrincipal();
+                break;
+            case 4: //Contatos
+                Contato contato= chamaCadastroContato();
+                if (contato != null) getContatoDAO().salvar(contato);
+                chamaMenuPrincipal();
+                break;
+            case 5: // SAIR
+                System.exit(0);
+                break;
         }
     }
 
-    private static Integer chamaOpcaoCrud() {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
-        int tipoOpcao = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
-                "Operação no cadastro: ",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
-        return tipoOpcao;
-    }
     private static Startups chamaCadastroStartup() throws SQLException, ClassNotFoundException {
-        Integer opcaoCrud = chamaOpcaoCrud();
-        Startups startups = null;
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
+                "Startup app",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
+        Startups startups= null;
+
         switch (opcaoCrud) {
             case 0: //Inserção
                 startups = cadastraStartup();
                 break;
+
             case 1: //Alteração
                 startups = selecionaStartup();
                 startups = editaStartup(startups);
                 break;
+
             case 2: //Exclusão
                 startups = selecionaStartup();
                 getStartupDAO().remover(startups);
                 startups = null;
                 break;
+
+            case 3: //Relatório
+                break;
+
             default: //Voltar
-                chamaMenuCadastros();
+                chamaMenuPrincipal();
                 break;
         }
         return startups;
     }
 
     public static Cidade chamaCadastroCidades() throws SQLException, ClassNotFoundException {
-        Integer opcaoCrud = chamaOpcaoCrud();
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
+                "Startup app",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
+
         Cidade cidade = null;
+
         switch (opcaoCrud) {
             case 0: //Inserção
                 cidade = cadastraCidade();
                 break;
+
             case 1: //Alteração
                 cidade = selecionaCidade();
                 cidade = editaCidade(cidade);
@@ -142,35 +132,180 @@ public class Main {
                 cidade = null;
                 break;
 
-            default: //Voltar
-                chamaMenuCadastros();
+            case 3: //Relatório
                 break;
 
+            default: //Voltar
+                chamaMenuPrincipal();
+                break;
         }
         return cidade;
     }
 
     private static Segmento chamaCadastroSegmento() throws SQLException, ClassNotFoundException {
-        Integer opcaoCrud = chamaOpcaoCrud();
-        Segmento segmento = null;
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
+                "Startup app",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
+        Segmento segmento= null;
+
         switch (opcaoCrud) {
             case 0: //Inserção
                 segmento = cadastraSegmento();
                 break;
+
             case 1: //Alteração
                 segmento = selecionaSegmento();
                 segmento = editaSegmento(segmento);
                 break;
+
             case 2: //Exclusão
-//                segmento = selecionaSegmento();
+                segmento = selecionaSegmento();
                 getSegmentoDAO().remover(segmento);
                 segmento = null;
                 break;
+
+            case 3: //Relatório
+                break;
+
             default: //Voltar
-                chamaMenuCadastros();
+                chamaMenuPrincipal();
                 break;
         }
         return segmento;
+    }
+
+    public static Contato chamaCadastroContato() throws SQLException, ClassNotFoundException {
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
+                "Startup app",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
+
+        Contato contato = null;
+
+        switch (opcaoCrud) {
+            case 0: //Inserção
+                contato = cadastraContato();
+                break;
+
+            case 1: //Alteração
+                contato = selecionaContato();
+                contato = editaContato(contato);
+                break;
+
+            case 2: //Exclusão
+                contato = selecionaContato();
+                getContatoDAO().remover(contato);
+                contato = null;
+                break;
+
+            case 3: //Relatório
+                break;
+
+            default: //Voltar
+                chamaMenuPrincipal();
+                break;
+
+        }
+        return contato;
+    }
+
+    public static TipoContato chamaCadastroTipoContato() throws SQLException, ClassNotFoundException {
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
+                "Startup app",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
+
+        TipoContato tipoContato = null;
+
+        switch (opcaoCrud) {
+            case 0: //Inserção
+                tipoContato = cadastraTipoContato();
+                break;
+
+            case 1: //Alteração
+                tipoContato = selecionaTipoContato();
+                tipoContato = editaTipoContato(tipoContato);
+                break;
+
+            case 2: //Exclusão
+                tipoContato = selecionaTipoContato();
+                getTipoContatoDAO().remover(tipoContato);
+                tipoContato = null;
+                break;
+
+            case 3: //Relatório
+                break;
+
+            default: //Voltar
+                chamaMenuPrincipal();
+                break;
+        }
+        return tipoContato;
+    }
+
+
+    private static Cidade cadastraCidade(){
+        JPopupMenu jPopupMenu;
+        JButton button;
+        Cidade cidades = new Cidade();
+
+        JTextField nomeCidade = new JTextField();
+
+        DefaultComboBoxModel<Estados> estadoEnum = new DefaultComboBoxModel<>(Estados.values());
+        JComboBox<Estados> comboBoxEstado = new JComboBox<>(estadoEnum);
+
+        Object[] message = {
+                "Nome da cidade: ", nomeCidade,
+                "Estado: ", comboBoxEstado
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Cidades", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeCidade.getText();
+        Estados uf = (Estados) estadoEnum.getSelectedItem();
+
+        cidades.setNomeCidade(nome);
+        cidades.setEstados(Estados.valueOf(String.valueOf(uf)));
+
+        return cidades;
+
+    }
+
+    private static Segmento cadastraSegmento(){
+
+        Segmento segmento = new Segmento();
+
+        JTextField nomeSegmento = new JTextField();
+
+        Object[] message = {
+                "Nome do Segmento: ", nomeSegmento};
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Segmentos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeSegmento.getText();
+        segmento.setNome(nome);
+        return segmento;
+
+    }
+
+    private static TipoContato cadastraTipoContato(){
+
+        TipoContato tipoContato = new TipoContato();
+        JTextField nomeTipoContato = new JTextField();
+
+        Object[] message = {
+                "Nome do tipo de contato: ", nomeTipoContato};
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de tipo de contatos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeTipoContato.getText();
+        tipoContato.setNome(nome);
+        return tipoContato;
+
     }
 
     private static Startups cadastraStartup() throws SQLException, ClassNotFoundException {
@@ -222,57 +357,26 @@ public class Main {
         startups.setDescSolucoes(descSolucoes.getText());
 
         return startups;
-
     }
 
-    private static Cidade cadastraCidade(){
+    private static Contato cadastraContato(){
         JPopupMenu jPopupMenu;
         JButton button;
-        Cidade cidades = new Cidade();
+        Contato contato= new Contato();
 
-        JTextField nomeCidade = new JTextField();
-
-        DefaultComboBoxModel<Estados> estadoEnum = new DefaultComboBoxModel<>(Estados.values());
-        JComboBox<Estados> comboBoxEstado = new JComboBox<>(estadoEnum);
+        JTextField nomeContato = new JTextField();
 
         Object[] message = {
-                "Nome da Cidade: ", nomeCidade,
-                "Estado: ", comboBoxEstado
+                "Nome do contato: ", nomeContato,
         };
 
         int option = JOptionPane.showConfirmDialog(null, message,
-                "Cadastro de Cidades", JOptionPane.OK_CANCEL_OPTION);
+                "Cadastro de contatos", JOptionPane.OK_CANCEL_OPTION);
 
-        String nome = nomeCidade.getText();
-        Estados uf = (Estados) estadoEnum.getSelectedItem();
+        String nome = nomeContato.getText();
+        contato.setNome(nome);
 
-        cidades.setNomeCidade(nome);
-        cidades.setEstados(Estados.valueOf(String.valueOf(uf)));
-
-        return cidades;
-
-    }
-
-    private static Segmento cadastraSegmento(){
-
-        Segmento segmento = new Segmento();
-
-        JTextField nomeSegmento = new JTextField();
-
-        Object[] message = {
-                "Nome do Segmento: ", nomeSegmento};
-
-        int option = JOptionPane.showConfirmDialog(null, message,
-                "Cadastro de Segmentos", JOptionPane.OK_CANCEL_OPTION);
-
-        String nome = nomeSegmento.getText();
-        segmento.setNome(nome);
-        return segmento;
-
-    }
-    public static StartupDAO getStartupDAO(){
-        StartupDAO startupDAO = new StartupDAO();
-        return startupDAO;
+        return contato;
     }
 
     public static CidadeDAO getCidadeDAO(){
@@ -283,6 +387,16 @@ public class Main {
     public static SegmentoDAO getSegmentoDAO(){
         SegmentoDAO segmentoDAO = new SegmentoDAO();
         return segmentoDAO;
+    }
+
+    public static TipoContadoDAO getTipoContatoDAO(){
+        TipoContadoDAO tipoContadoDAO = new TipoContadoDAO();
+        return tipoContadoDAO;
+    }
+
+    public static StartupDAO getStartupDAO(){
+        StartupDAO startupDAO = new StartupDAO();
+        return startupDAO;
     }
 
     public static ContatoDAO getContatoDAO(){
@@ -305,6 +419,54 @@ public class Main {
 
         return cidades.get(0);
     }
+    public static Segmento selecionaSegmento() throws SQLException {
+        Object[] selectionValues = new Object[0];
+        selectionValues = getSegmentoDAO().findSegmentosInArray();
+
+        String initialSelection = (String) selectionValues[0];
+        Object selection = JOptionPane.showInputDialog(null, "Selecione a Startup", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        List<Segmento> segmento = getSegmentoDAO().buscarPorNome((String) selection);
+
+        return segmento.get(0);
+    }
+
+    public static TipoContato selecionaTipoContato() throws SQLException, ClassNotFoundException {
+        Object[] selectionValues = new Object[0];
+        selectionValues = getTipoContatoDAO().findTipoContatoInArray();
+
+        String initialSelection = (String) selectionValues[0];
+        Object selection = JOptionPane.showInputDialog(null, "Selecione o tipo de contato", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        List<TipoContato> tipoContatos = getTipoContatoDAO().buscarPorNome((String) selection);
+
+        return tipoContatos.get(0);
+    }
+
+    public static Startups selecionaStartup(){
+        Object[] selectionValues = new Object[0];
+        try {
+            selectionValues = getStartupDAO().findStartupsInArray();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String initialSelection = (String) selectionValues[0];
+        Object selection = JOptionPane.showInputDialog(null, "Selecione a Startup", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        List<Startups> startups = getStartupDAO().buscarPorNome((String) selection);
+
+        return startups.get(0);
+    }
+
+
+    public static Contato selecionaContato(){
+        Object[] selectionValues = new Object[0];
+        selectionValues = getContatoDAO().findContatosInArray();
+        String initialSelection = (String) selectionValues[0];
+        Object selection = JOptionPane.showInputDialog(null, "Selecione o contato", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        List<Contato> contatoList = getContatoDAO().buscarPorNome((String) selection);
+
+        return contatoList.get(0);
+    }
 
     private static Cidade editaCidade(Cidade cidade){
         JPopupMenu jPopupMenu;
@@ -317,9 +479,9 @@ public class Main {
         JComboBox<Estados> comboBoxEstado = new JComboBox<>(estadoEnum);
 
         Object[] message = {
-                "Nome Anterior: " + cidade.getNomeCidade(),
-                "UF Anterior: " + cidade.getEstados().getUF(),
-                "Nome da Cidade: ", nomeCidade,
+                "Nome anterior: " + cidade.getNomeCidade(),
+                "UF anterior: " + cidade.getEstados().getUF(),
+                "Nome de Cidade: ", nomeCidade,
                 "Estado: ", comboBoxEstado
         };
 
@@ -337,6 +499,47 @@ public class Main {
 
     }
 
+
+    private static Segmento editaSegmento(Segmento segmento){
+        Segmento segmentos = new Segmento();
+
+        JTextField nomeSegmento = new JTextField();
+
+        Object[] message = {
+                "Nome anterior: " + segmento.getNome(),
+                "Nome de Segmento: ", nomeSegmento
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de Segmentos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeSegmento.getText();
+        segmentos.setId(segmento.getId());
+        segmentos.setNome(nome);
+
+        return segmentos;
+
+    }
+
+    private static TipoContato editaTipoContato(TipoContato tipoContato){
+        TipoContato tipoContatos= new TipoContato();
+        JTextField nomeTipoContato = new JTextField();
+
+        Object[] message = {
+                "Nome anterior: " + tipoContatos.getNome(),
+                "Nome do tipo de contato: ", nomeTipoContato
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message,
+                "Cadastro de tipo de contatos", JOptionPane.OK_CANCEL_OPTION);
+
+        String nome = nomeTipoContato.getText();
+        tipoContatos.setId(tipoContatos.getId());
+        tipoContatos.setNome(nome);
+
+        return tipoContatos;
+
+    }
 
     private static Startups editaStartup(Startups startup) throws SQLException, ClassNotFoundException {
         JPopupMenu jPopupMenu;
@@ -363,10 +566,10 @@ public class Main {
         JComboBox<String> cidade = new JComboBox<>(nomesCidades);
 
         Object[] message = {
-                "Nome Anterior: ", startup.getNomeStartup(),
+                "Nome anterior: ", startup.getNomeStartup(),
                 "Nome da Startup: ", nomeStartup,
-                "Descricao da Startup: ", descStartup,
-                "Data de Criação da Startup (dd/mm/yyyy): ", dataInicio,
+                "Descrição da Startup: ", descStartup,
+                "Data de criação da Startup (dd/mm/yyyy): ", dataInicio,
                 "Descrição das Soluções: ", descSolucoes,
                 "Rua: ", rua,
                 "Bairro: ", bairro,
@@ -389,118 +592,6 @@ public class Main {
         startups.setDescSolucoes(descSolucoes.getText());
 
         return startups;
-
-    }
-
-
-    private static Segmento editaSegmento(Segmento segmento){
-        Segmento segmentos = new Segmento();
-
-        JTextField nomeSegmento = new JTextField();
-
-        Object[] message = {
-                "Nome Anterior: " + segmento.getNome(),
-                "Nome do Segmento: ", nomeSegmento
-        };
-
-        int option = JOptionPane.showConfirmDialog(null, message,
-                "Cadastro de Segmentos", JOptionPane.OK_CANCEL_OPTION);
-
-        String nome = nomeSegmento.getText();
-        segmentos.setId(segmento.getId());
-        segmentos.setNome(nome);
-
-        return segmentos;
-
-    }
-
-
-    public static Startups selecionaStartup(){
-            Object[] selectionValues = new Object[0];
-            try {
-                selectionValues = getStartupDAO().findStartupsInArray();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            String initialSelection = (String) selectionValues[0];
-                Object selection = JOptionPane.showInputDialog(null, "Selecione a Startup", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-                List<Startups> startups = getStartupDAO().buscarPorNome((String) selection);
-
-            return startups.get(0);
-        }
-
-    public static Segmento selecionaSegmento() throws SQLException {
-        Object[] selectionValues = new Object[0];
-        selectionValues = getSegmentoDAO().findSegmentosInArray();
-
-        String initialSelection = (String) selectionValues[0];
-        Object selection = JOptionPane.showInputDialog(null, "Selecione a Startup", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        List<Segmento> segmento = getSegmentoDAO().buscarPorNome((String) selection);
-
-        return segmento.get(0);
-    }
-
-
-
-    public static Contato chamaCadastroContato() throws SQLException, ClassNotFoundException {
-        Integer opcaoCrud = chamaOpcaoCrud();
-        Contato contato = null;
-        switch (opcaoCrud) {
-            case 0: //Inserção
-                contato = cadastraContato();
-                break;
-            case 1: //Alteração
-                contato = selecionaContato();
-                contato = editaContato(contato);
-                break;
-
-            case 2: //Exclusão
-                contato = selecionaContato();
-                getContatoDAO().remover(contato);
-                contato = null;
-                break;
-
-            default: //Voltar
-                chamaMenuCadastros();
-                break;
-
-        }
-        return contato;
-    }
-
-
-    private static Contato cadastraContato(){
-        JPopupMenu jPopupMenu;
-        JButton button;
-        Contato contato= new Contato();
-
-        JTextField nomeContato = new JTextField();
-
-        Object[] message = {
-                "Nome do contato: ", nomeContato,
-        };
-
-        int option = JOptionPane.showConfirmDialog(null, message,
-                "Cadastro de contatos", JOptionPane.OK_CANCEL_OPTION);
-
-        String nome = nomeContato.getText();
-
-        contato.setNome(nome);
-
-        return contato;
-
-    }
-
-    public static Contato selecionaContato(){
-        Object[] selectionValues = new Object[0];
-        selectionValues = getContatoDAO().findContatosInArray();
-        String initialSelection = (String) selectionValues[0];
-        Object selection = JOptionPane.showInputDialog(null, "Selecione o contato", "Startup APP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        List<Contato> contatoList = getContatoDAO().buscarPorNome((String) selection);
-
-        return contatoList.get(0);
     }
 
     private static Contato editaContato(Contato contato){

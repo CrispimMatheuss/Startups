@@ -6,9 +6,10 @@ public class Startups extends Entity{
     private String nomeStartup;
     private String descStartup;
     private LocalDate dataInicio;
-    private Integer codigoCidade;
     private String enderecoStartup;
     private String descSolucoes;
+    private Integer codigoCidade;
+    private Integer idSegmento;
 
     public String getDescSolucoes() {
         return descSolucoes;
@@ -16,10 +17,6 @@ public class Startups extends Entity{
 
     public void setDescSolucoes(String descSolucoes) {
         this.descSolucoes = descSolucoes;
-    }
-
-    public Startups() {
-
     }
 
     public String getNomeStartup() {
