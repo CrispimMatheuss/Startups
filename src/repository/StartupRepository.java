@@ -2,6 +2,7 @@ package repository;
 
 import model.Startups;
 
+import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,18 +21,20 @@ public class StartupRepository {
     public void insere(Startups startups) throws SQLException, ClassNotFoundException{
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("insert into startup (idstartup, nome, descricao, data_inicio, endereco, desc_solucoes, idsegmento, idcidade) values(null,?,?,?,?,?,null,?)");
-        //stmt.setInt(1, startups.getId().intValue());
-        stmt.setString(1, startups.getNomeStartup());
-        stmt.setString(2, startups.getDescStartup());
-        stmt.setDate(3, Date.valueOf(startups.getDataInicio()));
-        stmt.setString(4, startups.getEnderecoStartup());
-        stmt.setString(5, startups.getDescSolucoes());
-        //stmt.setInt(7, startups.getId());
-        stmt.setInt(6, startups.getCodigoCidade());
+        PreparedStatement stmt = connection.prepareStatement("insert into startup (idstartup, nome, descricao, data_inicio, endereco, desc_solucoes, idcidade, idsegmento) values(?,?,?,?,?,?,?,?)");
+        stmt.setInt(1, startups.getId().intValue());
+        stmt.setString(2, startups.getNomeStartup());
+        stmt.setString(3, startups.getDescStartup());
+        stmt.setDate(4, Date.valueOf(startups.getDataInicio()));
+        stmt.setString(5, startups.getEnderecoStartup());
+        stmt.setString(6, startups.getDescSolucoes());
+        stmt.setInt(7, startups.getCodigoCidade());
+        stmt.setInt(8, startups.getIdSegmento());
 
         int i = stmt.executeUpdate();
-        System.out.println(i + " linhas inseridas");
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Startup inserida!");
+        }
         connection.close();
 
     }
@@ -47,7 +50,7 @@ public class StartupRepository {
 
         while (resultSet.next()){
             Startups startupsAux = new Startups();
-            startupsAux.setId(resultSet.getLong(1));
+            startupsAux.setId(resultSet.getInt(1));
             startups.add(startupsAux);
         }
 
@@ -71,7 +74,7 @@ public class StartupRepository {
         Connection connection = getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("update startup " +
-           "set nome = ?, descricao = ?, data_inicio = ?, endereco = ?, desc_solucoes = ?, idcidade = ? where idstartup = ?" );
+           "set nome = ?, descricao = ?, data_inicio = ?, endereco = ?, desc_solucoes = ?, idcidade = ?, idsegmento = ? where idstartup = ?" );
 
         stmt.setString(1, startups.getNomeStartup());
         stmt.setString(2, startups.getDescStartup());
@@ -79,10 +82,13 @@ public class StartupRepository {
         stmt.setString(4, startups.getEnderecoStartup());
         stmt.setString(5, startups.getDescSolucoes());
         stmt.setInt(6, startups.getCodigoCidade());
-        stmt.setInt(7, startups.getId().intValue());
+        stmt.setInt(7, startups.getIdSegmento().intValue());
+        stmt.setInt(8, startups.getId().intValue());
 
         int i = stmt.executeUpdate();
-        System.out.println(i + " linhas atualizadas!");
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Startup atualizada!");
+        }
         connection.close();
     }
 
@@ -91,7 +97,11 @@ public class StartupRepository {
         PreparedStatement stmt = connection.prepareStatement("delete from startup where idstartup = ?");
         stmt.setInt(1, startups.getId().intValue());
 
-        stmt.executeUpdate();
+        int i = stmt.executeUpdate();
+
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Startup excluida!");
+        }
 
         connection.close();
     }
@@ -106,7 +116,7 @@ public class StartupRepository {
 
         while (resultSet.next()){
             Startups startupsAux = new Startups();
-            startupsAux.setId(resultSet.getLong(1));
+            startupsAux.setId(resultSet.getInt(1));
             startupsAux.setNomeStartup(resultSet.getString(2));
             startupsAux.setDescStartup(resultSet.getString(3));
             startupsAux.setDataInicio(resultSet.getDate(4).toLocalDate());

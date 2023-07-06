@@ -246,8 +246,6 @@ public class Main {
 
 
     private static Cidade cadastraCidade(){
-        JPopupMenu jPopupMenu;
-        JButton button;
         Cidade cidades = new Cidade();
 
         JTextField nomeCidade = new JTextField();
@@ -309,8 +307,6 @@ public class Main {
     }
 
     private static Startups cadastraStartup() throws SQLException, ClassNotFoundException {
-        JPopupMenu jPopupMenu;
-        JButton button;
         Startups startups = new Startups();
 
         JTextField nomeStartup = new JTextField();
@@ -326,11 +322,20 @@ public class Main {
         List<Cidade> listaCidades = cidadeDAO.buscarTodos();
         String[] nomesCidades = new String[listaCidades.size()];
 
+        SegmentoDAO segmentoDAO = getSegmentoDAO();
+        List<Segmento> listaSegmentos = segmentoDAO.buscarTodos();
+        String[] nomesSegmentos = new String[listaSegmentos.size()];
+
         for(int i = 0; i < listaCidades.size(); i++){
             nomesCidades[i] = listaCidades.get(i).getNomeCidade();
         }
 
+        for(int p = 0; p < listaSegmentos.size(); p++){
+            nomesSegmentos[p] = listaSegmentos.get(p).getNome();
+        }
+
         JComboBox<String> cidade = new JComboBox<>(nomesCidades);
+        JComboBox<String> segmento = new JComboBox<>(nomesSegmentos);
 
         Object[] message = {
                 "Nome da Startup: ", nomeStartup,
@@ -339,15 +344,16 @@ public class Main {
                 "Descrição das Soluções: ", descSolucoes,
                 "Rua: ", rua,
                 "Bairro: ", bairro,
-                "Cidade: ", cidade
+                "Cidade: ", cidade,
+                "Segmento: ", segmento
+
         };
 
         int option = JOptionPane.showConfirmDialog(null, message,
                 "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
 
-        int indiceSelecionado = cidade.getSelectedIndex();
         int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
-
+        int codigoSegmento = listaSegmentos.get(segmento.getSelectedIndex()).getId().intValue();
         startups.setNomeStartup(nomeStartup.getText());
         startups.setDescStartup(descStartup.getText());
         LocalDate data = LocalDate.parse(dataInicio.getText(), formatter);
@@ -355,13 +361,12 @@ public class Main {
         startups.setCodigoCidade(codigoCidade);
         startups.setEnderecoStartup(rua.getText() + " - " + bairro.getText());
         startups.setDescSolucoes(descSolucoes.getText());
+        startups.setIdSegmento(codigoSegmento);
 
         return startups;
     }
 
     private static Contato cadastraContato(){
-        JPopupMenu jPopupMenu;
-        JButton button;
         Contato contato= new Contato();
 
         JTextField nomeContato = new JTextField();
@@ -469,8 +474,6 @@ public class Main {
     }
 
     private static Cidade editaCidade(Cidade cidade){
-        JPopupMenu jPopupMenu;
-        JButton button;
         Cidade cidades = new Cidade();
 
         JTextField nomeCidade = new JTextField();
@@ -542,8 +545,6 @@ public class Main {
     }
 
     private static Startups editaStartup(Startups startup) throws SQLException, ClassNotFoundException {
-        JPopupMenu jPopupMenu;
-        JButton button;
         Startups startups = new Startups();
 
         JTextField nomeStartup = new JTextField();
@@ -559,11 +560,20 @@ public class Main {
         List<Cidade> listaCidades = cidadeDAO.buscarTodos();
         String[] nomesCidades = new String[listaCidades.size()];
 
+        SegmentoDAO segmentoDAO = getSegmentoDAO();
+        List<Segmento> listaSegmentos = segmentoDAO.buscarTodos();
+        String[] nomesSegmentos = new String[listaSegmentos.size()];
+
         for(int i = 0; i < listaCidades.size(); i++){
             nomesCidades[i] = listaCidades.get(i).getNomeCidade();
         }
 
+        for(int p = 0; p < listaSegmentos.size(); p++){
+            nomesSegmentos[p] = listaSegmentos.get(p).getNome();
+        }
+
         JComboBox<String> cidade = new JComboBox<>(nomesCidades);
+        JComboBox<String> segmento = new JComboBox<>(nomesSegmentos);
 
         Object[] message = {
                 "Nome anterior: ", startup.getNomeStartup(),
@@ -573,14 +583,15 @@ public class Main {
                 "Descrição das Soluções: ", descSolucoes,
                 "Rua: ", rua,
                 "Bairro: ", bairro,
-                "Cidade: ", cidade
+                "Cidade: ", cidade,
+                "Segmento: ", segmento
         };
 
         int option = JOptionPane.showConfirmDialog(null, message,
                 "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
 
-        int indiceSelecionado = cidade.getSelectedIndex();
         int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
+        int codigoSegmento = listaSegmentos.get(segmento.getSelectedIndex()).getId().intValue();
 
         startups.setId(startup.getId());
         startups.setNomeStartup(nomeStartup.getText());
@@ -590,13 +601,12 @@ public class Main {
         startups.setCodigoCidade(codigoCidade);
         startups.setEnderecoStartup(rua.getText() + " - " + bairro.getText());
         startups.setDescSolucoes(descSolucoes.getText());
+        startups.setIdSegmento(codigoSegmento);
 
         return startups;
     }
 
     private static Contato editaContato(Contato contato){
-        JPopupMenu jPopupMenu;
-        JButton button;
         Contato contato1 = new Contato();
 
         JTextField nomeContato = new JTextField();

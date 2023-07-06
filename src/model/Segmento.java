@@ -1,17 +1,7 @@
 package model;
 
-public class Segmento {
-    private Integer id;
+public class Segmento extends Entity {
     private String nome;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return nome;
     }
@@ -23,8 +13,7 @@ public class Segmento {
     @Override
     public String toString() {
         return "Segmento{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
+                "nome='" + nome + '\'' +
                 '}';
     }
 }

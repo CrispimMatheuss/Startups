@@ -1,12 +1,13 @@
 package repository;
 
+import model.Cidade;
 import model.Segmento;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SegmentoDAO {
+public class SegmentoDAO implements IGenericDAO<Segmento> {
     static List<Segmento> segmentos = new ArrayList<>();
 
     public void salvar(Segmento segmento) {

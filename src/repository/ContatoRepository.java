@@ -40,7 +40,7 @@ public class ContatoRepository {
 
             while (resultSet.next()){
                 Contato contatoAux = new Contato();
-                contatoAux.setId(resultSet.getLong(1));
+                contatoAux.setId(resultSet.getInt(1));
                 listContato.add(contatoAux);
             }
 
@@ -57,7 +57,7 @@ public class ContatoRepository {
 
             while (resultSet.next()){
                 Contato contatoAux = new Contato();
-                contatoAux.setId(resultSet.getLong(1));
+                contatoAux.setId(resultSet.getInt(1));
                 contatoAux.setNome(resultSet.getString(2));
                 contatoAux.setIdStartup(resultSet.getInt(3));
                 contatoAux.setIdTipoContato(resultSet.getInt(4));

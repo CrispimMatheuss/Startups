@@ -18,7 +18,7 @@ public final class CidadeDAO implements IGenericDAO<Cidade> {
             if (objeto.getId() != null){
                 cidadeRepository.update(objeto);
             } else {
-                objeto.setId(cidadeRepository.proximoId().longValue());
+                objeto.setId(cidadeRepository.proximoId().intValue());
                 cidadeRepository.insere(objeto);
             }
         } catch (SQLException | ClassNotFoundException e) {

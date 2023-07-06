@@ -4,6 +4,7 @@ import model.Cidade;
 import model.Estados;
 import model.Startups;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,9 @@ public class CidadeRepository {
         stmt.setString(3, cidades.getEstados().getUF());
 
         int i = stmt.executeUpdate();
-        System.out.println(i + " linhas inseridas");
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Cidade inserida!");
+        }
         connection.close();
     }
 
@@ -40,7 +43,7 @@ public class CidadeRepository {
 
         while (resultSet.next()) {
             Cidade cidadeAux = new Cidade();
-            cidadeAux.setId(resultSet.getLong(1));
+            cidadeAux.setId(resultSet.getInt(1));
             cidadeAux.setNomeCidade(resultSet.getString(2));
             cidadeAux.setEstados(Estados.valueOf(resultSet.getString(3)));
             cidades.add(cidadeAux);
@@ -70,20 +73,36 @@ public class CidadeRepository {
         stmt.setInt(3, cidade.getId().intValue());
 
         int i = stmt.executeUpdate();
-        System.out.println(i + " linhas atualizadas");
+
+        if (i > 0){
+            JOptionPane.showMessageDialog(null, "Cidade atualizada!");
+        }
+
         connection.close();
     }
 
     public void delete(Cidade cidade) throws SQLException, ClassNotFoundException{
         Connection connection = getConnection();
+        int count = 0;
+        PreparedStatement stmt2 = connection.prepareStatement("select count(*) from startup where idcidade = ?");
+        stmt2.setInt(1, cidade.getId().intValue());
+        ResultSet resultSet = stmt2.executeQuery();
+        while(resultSet.next()){
+            count = resultSet.getInt(1);
+            if (count > 0){
+                JOptionPane.showMessageDialog(null, "Não é possível excluir a cidade pois ela está vinculada à alguma Startup!");
+            }
+        }
+        if (count ==0){
+            PreparedStatement stmt = connection.prepareStatement("delete from cidade where idcidade = ?");
+            stmt.setInt(1, cidade.getId().intValue());
+            int i = stmt.executeUpdate();
+            if (i > 0){
+                JOptionPane.showMessageDialog(null, "Cidade excluída!");
+            }
+            connection.close();
+        }
 
-        PreparedStatement stmt = connection.prepareStatement("delete from cidade where idcidade = ?");
-
-        stmt.setInt(1, cidade.getId().intValue());
-
-        stmt.executeUpdate();
-
-        connection.close();
     }
 
 

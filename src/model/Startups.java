@@ -59,14 +59,24 @@ public class Startups extends Entity{
         this.enderecoStartup = enderecoStartup;
     }
 
+    public Integer getIdSegmento() {
+        return idSegmento;
+    }
+
+    public void setIdSegmento(Integer idSegmento) {
+        this.idSegmento = idSegmento;
+    }
+
     @Override
     public String toString() {
         return "Startups{" +
                 "nomeStartup='" + nomeStartup + '\'' +
                 ", descStartup='" + descStartup + '\'' +
                 ", dataInicio=" + dataInicio +
-                ", codigoCidade=" + codigoCidade +
                 ", enderecoStartup='" + enderecoStartup + '\'' +
+                ", descSolucoes='" + descSolucoes + '\'' +
+                ", codigoCidade=" + codigoCidade +
+                ", idSegmento=" + idSegmento +
                 '}';
     }
 }

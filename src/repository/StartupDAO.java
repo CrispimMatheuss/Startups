@@ -17,7 +17,7 @@ public final class StartupDAO implements IGenericDAO<Startups> {
             if(objeto.getId() != null){
                 startupRepository.update(objeto);
             } else {
-                objeto.setId(startupRepository.proximoId().longValue());
+                objeto.setId(startupRepository.proximoId().intValue());
                 startupRepository.insere(objeto);
             }
         } catch (SQLException | ClassNotFoundException e) {

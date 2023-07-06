@@ -15,7 +15,7 @@ public class ContatoDAO implements IGenericDAO<Contato> {
                 if (objeto.getId() != null) {
                     contatoRepository.update(objeto);
                 } else {
-                    objeto.setId((long) contatoRepository.proximoId().intValue());
+                    objeto.setId(contatoRepository.proximoId().intValue());
                     contatoRepository.insere(objeto);
                 }
             } catch (SQLException | ClassNotFoundException e) {

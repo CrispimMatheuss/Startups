@@ -20,9 +20,9 @@ public class SegmentoRepository {
         Connection connection = getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("insert into " +
-                "segmento values (null, ?)");
-        //stmt.setInt(1, segmento.getId().intValue());
-        stmt.setString(1, segmento.getNome());
+                "segmento values (?, ?)");
+        stmt.setInt(1, segmento.getId().intValue());
+        stmt.setString(2, segmento.getNome());
 
         int i = stmt.executeUpdate();
         System.out.println(i + " linhas inseridas");
@@ -78,8 +78,7 @@ public class SegmentoRepository {
         PreparedStatement stmt = connection.prepareStatement("update segmento " +
                 "SET nome = ? WHERE id = ?");
         stmt.setString(1, segmento.getNome());
-        stmt.setInt(2, segmento.getId());
-
+        stmt.setInt(2, segmento.getId().intValue());
         int i = stmt.executeUpdate();
         System.out.println(i + " linhas atualizadas");
         connection.close();
