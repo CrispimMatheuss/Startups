@@ -14,7 +14,7 @@ public class RelatorioContatoForm  extends JPanel {
         private static final long serialVersionUID = 1L;
 
         public static final String[] nomeColunas =
-                {"Código", "Nome", "Startup", "Tipo contato", ""};
+                {"Código", "Startup", "Tipo contato", "Contato", ""};
 
         protected JTable table;
         protected JScrollPane scroller;

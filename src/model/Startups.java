@@ -69,14 +69,6 @@ public class Startups extends Entity{
 
     @Override
     public String toString() {
-        return "Startups{" +
-                "nomeStartup='" + nomeStartup + '\'' +
-                ", descStartup='" + descStartup + '\'' +
-                ", dataInicio=" + dataInicio +
-                ", enderecoStartup='" + enderecoStartup + '\'' +
-                ", descSolucoes='" + descSolucoes + '\'' +
-                ", codigoCidade=" + codigoCidade +
-                ", idSegmento=" + idSegmento +
-                '}';
+        return  "Nome Startup: '" + nomeStartup + '\'';
     }
 }

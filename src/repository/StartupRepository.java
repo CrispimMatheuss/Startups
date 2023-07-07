@@ -1,5 +1,6 @@
 package repository;
 
+import model.Cidade;
 import model.Startups;
 
 import javax.swing.*;
@@ -94,21 +95,35 @@ public class StartupRepository {
 
     public void delete(Startups startups) throws  SQLException, ClassNotFoundException{
         Connection connection = getConnection();
-        PreparedStatement stmt = connection.prepareStatement("delete from startup where idstartup = ?");
-        stmt.setInt(1, startups.getId().intValue());
 
-        int i = stmt.executeUpdate();
-
-        if (i > 0){
-            JOptionPane.showMessageDialog(null, "Startup excluida!");
+        int count = 0;
+        PreparedStatement stmt2 = connection.prepareStatement("select count(*) from contato where idstartup = ?");
+        stmt2.setInt(1, startups.getId().intValue());
+        ResultSet resultSet = stmt2.executeQuery();
+        while(resultSet.next()){
+            count = resultSet.getInt(1);
+            if (count > 0){
+                JOptionPane.showMessageDialog(null, "Não é possível excluir a Startup pois ela está vinculada à Contatos cadastrados!");
+            }
         }
 
+        if (count ==0) {
+            PreparedStatement stmt = connection.prepareStatement("delete from startup where idstartup = ?");
+            stmt.setInt(1, startups.getId().intValue());
+
+            int i = stmt.executeUpdate();
+
+            if (i > 0) {
+                JOptionPane.showMessageDialog(null, "Startup excluida!");
+            }
+        }
         connection.close();
     }
 
     public List<Startups> busca() throws SQLException,ClassNotFoundException{
         List<Startups> startups = new ArrayList<>();
         Connection connection = getConnection();
+
 
         PreparedStatement stmt = connection.prepareStatement("select * from startup");
 
@@ -130,4 +145,5 @@ public class StartupRepository {
         return startups;
 
     }
+
 }

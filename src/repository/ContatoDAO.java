@@ -1,6 +1,9 @@
 package repository;
 
 import model.Contato;
+import model.Startups;
+import model.TipoContato;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,19 +50,32 @@ public class ContatoDAO implements IGenericDAO<Contato> {
         public List<Contato> buscarPorNome(String nome) {
             List<Contato> contatosFiltrados = new ArrayList<>();
             for (Contato contato : contatos) {
-                if (contato.getNome().contains(nome)) {
+                int comprimento = contato.getNome().length();
+                int inicio = comprimento - 6;
+                String parte = contato.getNome().substring(inicio);
+                if (contato.getNome().contains(parte)) {
+
+
+
                     contatosFiltrados.add(contato);
                 }
             }
             return contatosFiltrados;
         }
 
-        public Object[] findContatosInArray() {
+        public Object[] findContatosInArray() throws SQLException, ClassNotFoundException {
             List<Contato> contatoList = buscarTodos();
             List<String> nomeContatos = new ArrayList<>();
+            TipoContatoDAO tipoContatoDAO = new TipoContatoDAO();
+            List<TipoContato> listaTipo = tipoContatoDAO.buscarTodos();
+
+            StartupDAO startupDAO = new StartupDAO();
+            List<Startups> listaStartups = startupDAO.buscarTodos();
+
 
             for (Contato contato : contatoList) {
-                nomeContatos.add(contato.getNome());
+                String contatos = startupDAO.buscarPorCodigo(contato.getIdStartup()).toString() + " - " + tipoContatoDAO.buscarPorCodigo(contato.getIdTipoContato()).toString()+ "Contato: " + contato.getNome();
+                nomeContatos.add(contatos);
             }
 
             return nomeContatos.toArray();

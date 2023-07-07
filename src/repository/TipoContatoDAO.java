@@ -1,5 +1,6 @@
 package repository;
 
+import model.Startups;
 import model.TipoContato;
 
 import java.sql.SQLException;
@@ -61,6 +62,17 @@ public class TipoContatoDAO {
             tipoContatoNomes.add(tipoContato.getNome());
         }
         return tipoContatoNomes.toArray();
+    }
+
+    public List<TipoContato> buscarPorCodigo(Integer codigo) {
+        List<TipoContato> tipoFiltradas = new ArrayList<>();
+        for (TipoContato startup : tipoContatos){
+            if (startup.getId() == codigo){
+                tipoFiltradas.add(startup);
+            }
+        }
+
+        return tipoFiltradas;
     }
 }
 

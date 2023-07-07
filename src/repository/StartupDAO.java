@@ -3,7 +3,6 @@ package repository;
 import model.Startups;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,5 +64,16 @@ public final class StartupDAO implements IGenericDAO<Startups> {
             startupsNomes.add(startups1.getNomeStartup());
         }
         return startupsNomes.toArray();
+    }
+
+    public List<Startups> buscarPorCodigo(Integer codigo) {
+        List<Startups> startupFiltradas = new ArrayList<>();
+        for (Startups startup : startups){
+            if (startup.getId() == codigo){
+                startupFiltradas.add(startup);
+            }
+        }
+
+        return startupFiltradas;
     }
 }

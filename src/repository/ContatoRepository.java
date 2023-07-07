@@ -21,10 +21,11 @@ public class ContatoRepository {
             Connection connection = getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("insert into " +
-                    "contato(id, nome, idstartup, id) values(null, ?, ?, ?");
-            stmt.setString(1, contato.getNome());
-            stmt.setInt(2, contato.getIdStartup());
-            stmt.setInt(3, Math.toIntExact(contato.getId()));
+                    "contato(id_contato, nome, idstartup, id) values(?, ?, ?, ?)");
+            stmt.setInt(1, contato.getId());
+            stmt.setString(2, contato.getNome());
+            stmt.setInt(3, contato.getIdStartup());
+            stmt.setInt(4, contato.getIdTipoContato());
 
             int i = stmt.executeUpdate();
             if (i > 0){
@@ -37,7 +38,7 @@ public class ContatoRepository {
             List<Contato> listContato = new ArrayList<>();
             Connection connection = getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("select * from contato where id = ?");
+            PreparedStatement stmt = connection.prepareStatement("select * from contato where id_contato = ?");
             stmt.setLong(1, id);
             ResultSet resultSet = stmt.executeQuery();
 
@@ -88,8 +89,11 @@ public class ContatoRepository {
             Connection connection = getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("update contato " +
-                    "SET id = ?, nome = ? WHERE id = ?");
+                    "SET nome = ?, idstartup = ?, id = ? WHERE id_contato = ?");
             stmt.setString(1, contato.getNome());
+            stmt.setInt(2, contato.getIdStartup());
+            stmt.setInt(3, contato.getIdTipoContato());
+            stmt.setInt(4, contato.getId());
 
             int i = stmt.executeUpdate();
             if (i > 0){
@@ -102,11 +106,11 @@ public class ContatoRepository {
         public void delete(Contato contato) throws SQLException, ClassNotFoundException {
             Connection connection = getConnection();
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM contato" +
-                    " where id = ?");
+                    " where id_contato = ?");
             stmt.setInt(1, contato.getId().intValue());
             int i = stmt.executeUpdate();
             if (i > 0){
-                JOptionPane.showMessageDialog(null, "Segmento excluido!");
+                JOptionPane.showMessageDialog(null, "Contato excluido!");
             }
             connection.close();
         }

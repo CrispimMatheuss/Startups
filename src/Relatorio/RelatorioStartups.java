@@ -59,7 +59,9 @@ public class RelatorioStartups extends AbstractTableModel {
             case INDEX_DESCRICAO_SOLUCOES:
                 return startups.getDescSolucoes();
             case INDEX_SEGMENTO:
-                return segmentoDAO.buscarPorCodigo(startups.getIdSegmento().intValue());
+                //return segmentoDAO.buscarPorCodigo(startups.getIdSegmento().intValue());
+                return segmentoDAO.buscarPorCodigo(startups.getIdSegmento());
+                //return null;
             case INDEX_CIDADE:
                 return cidadeDAO.buscarPorCodigo(startups.getCodigoCidade().intValue());
             default:
