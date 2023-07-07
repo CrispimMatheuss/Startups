@@ -571,7 +571,7 @@ public class Main {
         JTextField nomeTipoContato = new JTextField();
 
         Object[] message = {
-                "Nome anterior: " + tipoContatos.getNome(),
+                "Nome anterior: " + tipoContato.getNome(),
                 "Nome do tipo de contato: ", nomeTipoContato
         };
 
@@ -579,7 +579,7 @@ public class Main {
                 "Cadastro de tipo de contatos", JOptionPane.OK_CANCEL_OPTION);
 
         String nome = nomeTipoContato.getText();
-        tipoContatos.setId(tipoContatos.getId());
+        tipoContatos.setId(tipoContato.getId());
         tipoContatos.setNome(nome);
 
         return tipoContatos;

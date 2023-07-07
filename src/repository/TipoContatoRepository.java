@@ -20,8 +20,9 @@ public class TipoContatoRepository {
     public void insere (TipoContato tipoContato) throws SQLException, ClassNotFoundException {
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("insert into tipocontato values(null, ?)");
-        stmt.setString(1, tipoContato.getNome());
+        PreparedStatement stmt = connection.prepareStatement("insert into tipocontato values(?, ?)");
+        stmt.setInt(1, tipoContato.getId().intValue());
+        stmt.setString(2, tipoContato.getNome());
 
         int i = stmt.executeUpdate();
         if (i > 0){
@@ -50,6 +51,13 @@ public class TipoContatoRepository {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM TipoContato");
         ResultSet resultSet = stmt.executeQuery();
 
+        while (resultSet.next()){
+            TipoContato tipoContatoAux = new TipoContato();
+            tipoContatoAux.setId(resultSet.getInt(1));
+            tipoContatoAux.setNome(resultSet.getString(2));
+            tipoContato.add(tipoContatoAux);
+        }
+
         connection.close();
         return tipoContato;
     }
@@ -69,10 +77,10 @@ public class TipoContatoRepository {
     public void update(TipoContato tipoContato) throws SQLException, ClassNotFoundException {
         Connection connection = getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("update tipocontato set id = ?, nome = ? where id = ?");
+        PreparedStatement stmt = connection.prepareStatement("update tipocontato set nome = ? where id = ?");
 
-        stmt.setInt(1, tipoContato.getId());
-        stmt.setString(2, tipoContato.getNome());
+        stmt.setString(1, tipoContato.getNome());
+        stmt.setInt(2, tipoContato.getId());
 
         int i = stmt.executeUpdate();
         if (i > 0){
