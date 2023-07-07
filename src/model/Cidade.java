@@ -23,9 +23,8 @@ public class Cidade extends Entity{
 
     @Override
     public String toString() {
-        return "Cidade{" +
-                "nomeCidade='" + nomeCidade + '\'' +
-                ", estados=" + estados +
+        return  "Nome: '" + nomeCidade + '\'' +
+                ", UF: " + estados +
                 '}';
     }
 }

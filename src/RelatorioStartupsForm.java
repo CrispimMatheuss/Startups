@@ -14,7 +14,7 @@ public class RelatorioStartupsForm extends JPanel {
     private static final long serialVersionUID = 1L;
 
     public static final String[] nomeColunas =
-            {"Código", "Nome", "Descrição", "Data Inicio", "Rua - Bairro", "Descrição das Soluções", "Segmento", "Cidade", ""};
+            {"Código", "Nome", "Descrição", "Data Inicio", "Rua - Bairro", "Descrição das Soluções", "Cidade", ""};
 
     protected JTable table;
     protected JScrollPane scroller;

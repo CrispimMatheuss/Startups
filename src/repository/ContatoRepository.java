@@ -21,11 +21,11 @@ public class ContatoRepository {
             Connection connection = getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("insert into " +
-                    "contato(id_contato, nome, idstartup, id) values(?, ?, ?, ?)");
-            stmt.setInt(1, contato.getId());
-            stmt.setString(2, contato.getNome());
-            stmt.setInt(3, contato.getIdStartup());
-            stmt.setInt(4, contato.getIdTipoContato());
+                    "contato(id_contato, nome, idstartup, id) values(null, ?, ?, ?)");
+//            stmt.setInt(1, contato.getId());
+            stmt.setString(1, contato.getNome());
+            stmt.setInt(2, contato.getIdStartup());
+            stmt.setInt(3, contato.getIdTipoContato());
 
             int i = stmt.executeUpdate();
             if (i > 0){

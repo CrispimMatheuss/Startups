@@ -15,9 +15,8 @@ public class RelatorioStartups extends AbstractTableModel {
     public static final int INDEX_DATA_INICIO = 3;
     public static final int INDEX_ENDERECO = 4;
     public static final int INDEX_DESCRICAO_SOLUCOES = 5;
-    public static final int INDEX_SEGMENTO = 6;
-    public static final int INDEX_CIDADE = 7;
-    public static final int INDEX_ESCONDIDO = 8;
+    public static final int INDEX_CIDADE = 6;
+    public static final int INDEX_ESCONDIDO = 7;
 
     protected String[] nomeColunas;
     protected Vector<Startups> vetorDados;
@@ -58,10 +57,10 @@ public class RelatorioStartups extends AbstractTableModel {
                 return startups.getEnderecoStartup();
             case INDEX_DESCRICAO_SOLUCOES:
                 return startups.getDescSolucoes();
-            case INDEX_SEGMENTO:
-                //return segmentoDAO.buscarPorCodigo(startups.getIdSegmento().intValue());
-                return segmentoDAO.buscarPorCodigo(startups.getIdSegmento());
-                //return null;
+//            case INDEX_SEGMENTO:
+//                //return segmentoDAO.buscarPorCodigo(startups.getIdSegmento().intValue());
+//                return segmentoDAO.buscarPorCodigo(startups.getIdSegmento());
+//                //return null;
             case INDEX_CIDADE:
                 return cidadeDAO.buscarPorCodigo(startups.getCodigoCidade().intValue());
             default:
