@@ -58,6 +58,17 @@ public final class CidadeDAO implements IGenericDAO<Cidade> {
         return cidadesFiltradas;
     }
 
+    public List<Cidade> buscarPorCodigo(Integer codigo) {
+        List<Cidade> cidadesFiltradas = new ArrayList<>();
+        for (Cidade cidade : cidades){
+            if (cidade.getId() == codigo){
+                cidadesFiltradas.add(cidade);
+            }
+        }
+
+        return cidadesFiltradas;
+    }
+
     public Object[] findCidadeInArray() throws SQLException, ClassNotFoundException {
         List<Cidade> cidades = buscarTodos();
         List<String> cidadesNomes = new ArrayList<>();

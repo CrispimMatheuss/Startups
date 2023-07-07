@@ -50,7 +50,6 @@ public class TableSegmento extends AbstractTableModel {
         public int getColumnCount() {
             return nomeColunas.length;
         }
-    }
-
-
 }
+
+

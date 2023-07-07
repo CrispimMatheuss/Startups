@@ -1,4 +1,3 @@
-import Form.RelatorioCidadeForm;
 import model.*;
 import model.Usuario;
 import repository.*;
@@ -73,8 +72,8 @@ public class Main {
         return false;
     }
 
-    private static void chamaMenuPrincipal() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenu = {"Cidades", "Segmento", "Tipo de contato", "Startups", "Contatos", "Sair"}; //{"Cadastros", "Relatorios", "Sair"};
+    public static void chamaMenuPrincipal() throws SQLException, ClassNotFoundException {
+        String[] opcoesMenu = {"Cidades", "Segmento", "Tipo de contato", "Startups", "Contatos", "Relatórios", "Sair"};
         int opcao = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Principal",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenu, opcoesMenu[0]);
@@ -105,14 +104,17 @@ public class Main {
                 if (contato != null) getContatoDAO().salvar(contato);
                 chamaMenuPrincipal();
                 break;
-            case 5: // SAIR
+            case 5:
+                chamaMenuRelatorios();
+                break;
+            case 6: // SAIR
                 System.exit(0);
                 break;
         }
     }
 
     private static Startups chamaCadastroStartup() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -134,9 +136,6 @@ public class Main {
                 startups = null;
                 break;
 
-            case 3: //Relatório
-                break;
-
             default: //Voltar
                 chamaMenuPrincipal();
                 break;
@@ -145,7 +144,7 @@ public class Main {
     }
 
     public static Cidade chamaCadastroCidades() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -168,10 +167,6 @@ public class Main {
                 cidade = null;
                 break;
 
-            case 3: //Relatório
-                RelatorioCidadeForm.emitirRelatorio(getCidadeDAO().buscarTodos());
-                break;
-
             default: //Voltar
                 chamaMenuPrincipal();
                 break;
@@ -180,7 +175,7 @@ public class Main {
     }
 
     private static Segmento chamaCadastroSegmento() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -202,9 +197,6 @@ public class Main {
                 segmento = null;
                 break;
 
-            case 3: //Relatório
-                break;
-
             default: //Voltar
                 chamaMenuPrincipal();
                 break;
@@ -213,7 +205,7 @@ public class Main {
     }
 
     public static Contato chamaCadastroContato() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -236,9 +228,6 @@ public class Main {
                 contato = null;
                 break;
 
-            case 3: //Relatório
-                break;
-
             default: //Voltar
                 chamaMenuPrincipal();
                 break;
@@ -248,7 +237,7 @@ public class Main {
     }
 
     public static TipoContato chamaCadastroTipoContato() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -269,9 +258,6 @@ public class Main {
                 tipoContato = selecionaTipoContato();
                 getTipoContatoDAO().remover(tipoContato);
                 tipoContato = null;
-                break;
-
-            case 3: //Relatório
                 break;
 
             default: //Voltar
@@ -669,6 +655,28 @@ public class Main {
         return contato1;
     }
 
+    private static void chamaRelatorioStartups() throws SQLException, ClassNotFoundException {
+        List<Startups> startups = getStartupDAO().buscarTodos();
+        RelatorioStartupsForm.emitirRelatorio(startups);
+    }
 
+    public static void chamaMenuRelatorios() throws SQLException, ClassNotFoundException {
+        String[] opcoesMenuProcesso = {"Cidades", "Startups", "Voltar"};
+        int menu_processos = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
+                "Menu Relatórios",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuProcesso, opcoesMenuProcesso[0]);
+
+        switch (menu_processos) {
+            case 0: //Cidades
+                RelatorioCidadeForm.emitirRelatorio(getCidadeDAO().buscarTodos());
+                break;
+            case 1: //Startups
+                chamaRelatorioStartups();
+                break;
+            case 2: //Voltar
+                chamaMenuPrincipal();
+                break;
+        }
+    }
 
 }

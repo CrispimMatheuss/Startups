@@ -1,7 +1,4 @@
-package Form;
-
 import Relatorio.TableCidade;
-import jdk.jfr.internal.tool.Main;
 import model.Cidade;
 
 import javax.swing.*;
@@ -10,6 +7,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
@@ -52,6 +50,13 @@ public class RelatorioCidadeForm extends JPanel{
                 frame.addWindowListener(new WindowAdapter() {
                     public void windowClosing(WindowEvent evt) {
                         frame.setVisible(false);
+                        try {
+                            Main.chamaMenuRelatorios();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
 
                     }
                 });

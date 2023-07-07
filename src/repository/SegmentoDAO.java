@@ -55,6 +55,16 @@ public class SegmentoDAO implements IGenericDAO<Segmento> {
         return segmentosFiltrados;
     }
 
+    public List<Segmento> buscarPorCodigo(Integer codigo) {
+        List<Segmento> segmentosFiltrados = new ArrayList<>();
+        for (Segmento segmento : segmentos) {
+            if (segmento.getId() == codigo) {
+                segmentosFiltrados.add(segmento);
+            }
+        }
+        return segmentosFiltrados;
+    }
+
     public Object[] findSegmentosInArray() {
         List<Segmento> segmentoList = buscarTodos();
         List<String> nomeSegmentos = new ArrayList<>();
