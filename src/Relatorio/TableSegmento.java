@@ -25,12 +25,16 @@ public class TableSegmento extends AbstractTableModel {
 
         @Override
         public boolean isCellEditable(int linha, int coluna) {
-            return coluna != INDEX_ESCONDIDO;
+            if (coluna == INDEX_ESCONDIDO) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
         @Override
         public Object getValueAt(int linha, int coluna) {
-            Segmento registroSegmento = vetorDados.get(linha);
+            Segmento registroSegmento = (Segmento) vetorDados.get(linha);
             switch (coluna) {
                 case INDEX_CODIGO:
                     return registroSegmento.getId();
