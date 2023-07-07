@@ -57,3 +57,4 @@ public class TableContato extends AbstractTableModel {
             return nomeColunas.length;
         }
     }
+

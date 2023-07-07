@@ -665,13 +665,19 @@ public class Main {
         RelatorioStartupsForm.emitirRelatorio(startups);
     }
 
+
     private static void chamaRelatorioContato() throws SQLException, ClassNotFoundException {
         List<Contato> contato = getContatoDAO().buscarTodos();
         RelatorioContatoForm.emitirRelatorio(contato);
     }
 
+  private static void chamaRelatorioSegmentos() throws SQLException, ClassNotFoundException {
+        List<Segmento> segmentos = getSegmentoDAO().buscarTodos();
+        RelatorioSegmentoForm.emitirRelatorio(segmentos);
+    }
+
     public static void chamaMenuRelatorios() throws SQLException, ClassNotFoundException {
-        String[] opcoesMenuProcesso = {"Cidades", "Startups", "Tipo contato","Voltar"};
+        String[] opcoesMenuProcesso = {"Cidades", "Startups", "Segmentos", "Voltar"};
         int menu_processos = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Relatórios",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuProcesso, opcoesMenuProcesso[0]);
@@ -683,8 +689,8 @@ public class Main {
             case 1: //Startups
                 chamaRelatorioStartups();
                 break;
-            case 2: //Contato
-                chamaRelatorioTipoContato();
+            case 2: //Segmentos
+                chamaRelatorioSegmentos();
                 break;
             case 3: //Voltar
                 chamaMenuPrincipal();
