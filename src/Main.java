@@ -655,12 +655,23 @@ public class Main {
         return contato1;
     }
 
+    private static void chamaRelatorioTipoContato() throws SQLException, ClassNotFoundException {
+        List<TipoContato> tipoContato = getTipoContatoDAO().buscarTodos();
+        RelatorioTipoContatoForm.emitirRelatorio(tipoContato);
+    }
+
     private static void chamaRelatorioStartups() throws SQLException, ClassNotFoundException {
         List<Startups> startups = getStartupDAO().buscarTodos();
         RelatorioStartupsForm.emitirRelatorio(startups);
     }
 
-    private static void chamaRelatorioSegmentos() throws SQLException, ClassNotFoundException {
+
+    private static void chamaRelatorioContato() throws SQLException, ClassNotFoundException {
+        List<Contato> contato = getContatoDAO().buscarTodos();
+        RelatorioContatoForm.emitirRelatorio(contato);
+    }
+
+  private static void chamaRelatorioSegmentos() throws SQLException, ClassNotFoundException {
         List<Segmento> segmentos = getSegmentoDAO().buscarTodos();
         RelatorioSegmentoForm.emitirRelatorio(segmentos);
     }
