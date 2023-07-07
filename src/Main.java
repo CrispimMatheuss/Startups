@@ -1,3 +1,4 @@
+import Form.RelatorioCidadeForm;
 import model.*;
 import model.Usuario;
 import repository.*;
@@ -11,30 +12,65 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        Object usuarioLogado = chamaSelecaoUsuario();
-        checaSenhaUsuario(usuarioLogado);
+        chamaLogin();
+        //Object usuarioLogado = chamaLogin();//chamaSelecaoUsuario();
+        //verificarCredenciais(usuarioLogado);
     }
 
-    private static Object chamaSelecaoUsuario() {
-        Object[] selectionValues = UsuarioDAO.findUsuariosSistemaInArray();
-        String initialSelection = (String) selectionValues[0];
-        Object selection = JOptionPane.showInputDialog(null, "Selecione o usuario?",
-                "Cadastro de Startups", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        return selection;
-    }
+    public static void chamaLogin() throws SQLException, ClassNotFoundException {
+        Object[] nomeUsuario = UsuarioDAO.findUsuariosSistemaInArray();
 
-    private static void checaSenhaUsuario(Object usuarioLogado) throws SQLException, ClassNotFoundException {
-        String senhaDigitada = JOptionPane.showInputDialog(null,
-                "Informe a senha do usuario (" + usuarioLogado + ")");
-        Usuario usuarioByLogin = UsuarioDAO.findUsuarioByLogin((String) usuarioLogado);
+        JComboBox<Object> nomeUsuarioComboBox = new JComboBox<>(nomeUsuario);
+        JPasswordField passwordField = new JPasswordField();
 
-        if (usuarioByLogin.getSenha().equals(senhaDigitada)) {
-            chamaMenuPrincipal();
+        Object[] loginMessage= {"Usuário:", nomeUsuarioComboBox, "Senha:", passwordField};
+
+        int loginOption = JOptionPane.showConfirmDialog(null, loginMessage,
+                "Tela de login", JOptionPane.OK_CANCEL_OPTION);
+
+        if (loginOption == JOptionPane.OK_OPTION) {
+            Object nomeUser = nomeUsuarioComboBox.getSelectedItem();
+            String password = new String(passwordField.getPassword());
+
+            if (verificarCredenciais(nomeUser, password)) {
+                verificarCredenciais(nomeUser, password);
+                chamaMenuPrincipal();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Tente novamente. Usuário e/ou senha inválido.", "Erro de login", JOptionPane.ERROR_MESSAGE);
+                chamaLogin();
+            }
+        } else if (loginOption == JOptionPane.CANCEL_OPTION) {
+            int opcaoSair = JOptionPane.showOptionDialog(null,
+                    "Deseja realmente sair?",
+                    "Confirmação", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+            if (opcaoSair == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
+                chamaLogin();
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "Senha incorreta!");
-            checaSenhaUsuario(usuarioLogado);
+            System.exit(0);
+        }
+        //return null;
+    }
+
+
+    public static boolean verificarCredenciais(Object usuarioLogado, String password) {
+        try {
+            String nomeUsuarioStr = usuarioLogado.toString();
+            Usuario usuario = UsuarioDAO.findUsuarioByLogin(nomeUsuarioStr);
+
+            if (usuario != null && usuario.getSenha().equals(password)) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        return false;
     }
 
     private static void chamaMenuPrincipal() throws SQLException, ClassNotFoundException {
@@ -76,7 +112,7 @@ public class Main {
     }
 
     private static Startups chamaCadastroStartup() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -109,7 +145,7 @@ public class Main {
     }
 
     public static Cidade chamaCadastroCidades() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -133,6 +169,7 @@ public class Main {
                 break;
 
             case 3: //Relatório
+                RelatorioCidadeForm.emitirRelatorio(getCidadeDAO().buscarTodos());
                 break;
 
             default: //Voltar
@@ -143,7 +180,7 @@ public class Main {
     }
 
     private static Segmento chamaCadastroSegmento() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -176,7 +213,7 @@ public class Main {
     }
 
     public static Contato chamaCadastroContato() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -211,7 +248,7 @@ public class Main {
     }
 
     public static TipoContato chamaCadastroTipoContato() throws SQLException, ClassNotFoundException {
-        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatório", "Voltar"};
+        String[] opcao = {"Inserção", "Alteração", "Exclusão", "Relatorio", "Voltar"};
         int opcaoCrud = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Startup app",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
@@ -352,16 +389,21 @@ public class Main {
         int option = JOptionPane.showConfirmDialog(null, message,
                 "Cadastro de Startups", JOptionPane.OK_CANCEL_OPTION);
 
-        int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
-        int codigoSegmento = listaSegmentos.get(segmento.getSelectedIndex()).getId().intValue();
-        startups.setNomeStartup(nomeStartup.getText());
-        startups.setDescStartup(descStartup.getText());
-        LocalDate data = LocalDate.parse(dataInicio.getText(), formatter);
-        startups.setDataInicio(data);
-        startups.setCodigoCidade(codigoCidade);
-        startups.setEnderecoStartup(rua.getText() + " - " + bairro.getText());
-        startups.setDescSolucoes(descSolucoes.getText());
-        startups.setIdSegmento(codigoSegmento);
+        if (option == JOptionPane.CLOSED_OPTION) {
+            chamaMenuPrincipal();
+        }
+        else{
+            int codigoCidade = listaCidades.get(cidade.getSelectedIndex()).getId().intValue();
+            int codigoSegmento = listaSegmentos.get(segmento.getSelectedIndex()).getId().intValue();
+            startups.setNomeStartup(nomeStartup.getText());
+            startups.setDescStartup(descStartup.getText());
+            LocalDate data = LocalDate.parse(dataInicio.getText(), formatter);
+            startups.setDataInicio(data);
+            startups.setCodigoCidade(codigoCidade);
+            startups.setEnderecoStartup(rua.getText() + " - " + bairro.getText());
+            startups.setDescSolucoes(descSolucoes.getText());
+            startups.setIdSegmento(codigoSegmento);
+        }
 
         return startups;
     }
